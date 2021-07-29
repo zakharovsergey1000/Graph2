@@ -108,7 +108,9 @@ class RepoRepository @Inject constructor(
                             fullName = "$owner/$name",
                             description = "",
                             owner = Repo.Owner(owner, null),
-                            stars = 0
+                            stars = 0,
+                            x = 0f,
+                            y = 0f
                         )
                     )
                     repoDao.insertContributors(item)

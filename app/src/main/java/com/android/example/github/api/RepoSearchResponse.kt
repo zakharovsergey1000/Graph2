@@ -28,7 +28,7 @@ import com.google.gson.annotations.SerializedName
 data class RepoSearchResponse(
     @SerializedName("total_count")
     val total: Int = 0,
-    @SerializedName("items")
+    @SerializedName("points")
     val items: List<Repo>
 ) {
     var nextPage: Int? = null

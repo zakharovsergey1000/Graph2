@@ -47,10 +47,10 @@ interface GithubService {
         @Path("name") name: String
     ): LiveData<ApiResponse<List<Contributor>>>
 
-    @GET("search/repositories")
-    fun searchRepos(@Query("q") query: String): LiveData<ApiResponse<RepoSearchResponse>>
+    @GET("api/test/points")
+    fun searchRepos(@Query("count") query: String): LiveData<ApiResponse<RepoSearchResponse>>
 
 
-    @GET("search/repositories")
-    fun searchRepos(@Query("q") query: String, @Query("page") page: Int): Call<RepoSearchResponse>
+    @GET("api/test/points")
+    fun searchRepos(@Query("count") query: String, @Query("page") page: Int): Call<RepoSearchResponse>
 }

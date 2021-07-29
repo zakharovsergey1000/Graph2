@@ -35,7 +35,7 @@ class AppModule {
     @Provides
     fun provideGithubService(): GithubService {
         return Retrofit.Builder()
-            .baseUrl("https://api.github.com/")
+            .baseUrl("https://hr-challenge.interactivestandard.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .build()

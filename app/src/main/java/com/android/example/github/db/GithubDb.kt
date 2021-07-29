@@ -33,7 +33,7 @@ import com.android.example.github.vo.User
         Repo::class,
         Contributor::class,
         RepoSearchResult::class],
-    version = 3,
+    version = 5,
     exportSchema = false
 )
 abstract class GithubDb : RoomDatabase() {

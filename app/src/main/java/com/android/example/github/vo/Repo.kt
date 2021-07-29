@@ -43,7 +43,11 @@ data class Repo(
     @field:Embedded(prefix = "owner_")
     val owner: Owner,
     @field:SerializedName("stargazers_count")
-    val stars: Int
+    val stars: Int,
+    @field:SerializedName("x")
+    val x: Float,
+    @field:SerializedName("y")
+    val y: Float
 ) {
 
     data class Owner(
