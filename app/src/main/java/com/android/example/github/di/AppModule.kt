@@ -19,6 +19,7 @@ package com.android.example.github.di
 import android.app.Application
 import androidx.room.Room
 import com.android.example.github.api.GithubService
+import com.android.example.github.api.UnsafeOkHttpClient
 import com.android.example.github.db.GithubDb
 import com.android.example.github.db.RepoDao
 import com.android.example.github.db.UserDao
@@ -27,6 +28,7 @@ import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module(includes = [ViewModelModule::class])
@@ -34,8 +36,14 @@ class AppModule {
     @Singleton
     @Provides
     fun provideGithubService(): GithubService {
+        val okHttpClient = UnsafeOkHttpClient.getUnsafeOkHttpClient().newBuilder()
+            .readTimeout(60, TimeUnit.SECONDS)
+            .cache(null)
+            .build()
+
         return Retrofit.Builder()
             .baseUrl("https://hr-challenge.interactivestandard.com/")
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .build()
