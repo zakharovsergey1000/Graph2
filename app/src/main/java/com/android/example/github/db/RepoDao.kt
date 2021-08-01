@@ -24,7 +24,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.android.example.github.testing.OpenForTesting
-import com.android.example.github.vo.Contributor
 import com.android.example.github.vo.Repo
 import com.android.example.github.vo.RepoSearchResult
 
@@ -39,32 +38,21 @@ abstract class RepoDao {
     abstract fun insert(vararg repos: Repo)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insertContributors(contributors: List<Contributor>)
+    abstract fun insertRepos(repositories: List<Repo>): LongArray
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insertRepos(repositories: List<Repo>)
+    @Query("SELECT * FROM repo WHERE ROWID in (:rowid)")
+    abstract fun getReposFromRowids(rowid: LongArray): List<Repo>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     abstract fun createRepoIfNotExists(repo: Repo): Long
 
-    @Query("SELECT * FROM repo WHERE owner_login = :ownerLogin AND name = :name")
-    abstract fun load(ownerLogin: String, name: String): LiveData<Repo>
-
-    @Query(
-        """
-        SELECT login, avatarUrl, repoName, repoOwner, contributions FROM contributor
-        WHERE repoName = :name AND repoOwner = :owner
-        ORDER BY contributions DESC"""
-    )
-    abstract fun loadContributors(owner: String, name: String): LiveData<List<Contributor>>
-
     @Query(
         """
         SELECT * FROM Repo
-        WHERE owner_login = :owner
-        ORDER BY stars DESC"""
+        WHERE count = :count
+        ORDER BY x ASC"""
     )
-    abstract fun loadRepositories(owner: String): LiveData<List<Repo>>
+    abstract fun loadRepositories(count: String): LiveData<List<Repo>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(result: RepoSearchResult)

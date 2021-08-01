@@ -25,7 +25,6 @@ import com.android.example.github.util.TestUtil
 import com.android.example.github.util.mock
 import com.android.example.github.vo.Repo
 import com.android.example.github.vo.Resource
-import com.android.example.github.vo.User
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule

@@ -22,7 +22,6 @@ import com.android.example.github.api.GithubService
 import com.android.example.github.api.UnsafeOkHttpClient
 import com.android.example.github.db.GithubDb
 import com.android.example.github.db.RepoDao
-import com.android.example.github.db.UserDao
 import com.android.example.github.util.LiveDataCallAdapterFactory
 import dagger.Module
 import dagger.Provides
@@ -57,12 +56,6 @@ class AppModule {
             .databaseBuilder(app, GithubDb::class.java, "github.db")
             .fallbackToDestructiveMigration()
             .build()
-    }
-
-    @Singleton
-    @Provides
-    fun provideUserDao(db: GithubDb): UserDao {
-        return db.userDao()
     }
 
     @Singleton

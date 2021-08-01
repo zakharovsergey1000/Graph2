@@ -19,6 +19,7 @@ package com.android.example.github.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.switchMap
 import com.android.example.github.AppExecutors
+import com.android.example.github.api.ApiResponse
 import com.android.example.github.api.ApiSuccessResponse
 import com.android.example.github.api.GithubService
 import com.android.example.github.api.RepoSearchResponse
@@ -27,7 +28,6 @@ import com.android.example.github.db.RepoDao
 import com.android.example.github.testing.OpenForTesting
 import com.android.example.github.util.AbsentLiveData
 import com.android.example.github.util.RateLimiter
-import com.android.example.github.vo.Contributor
 import com.android.example.github.vo.Repo
 import com.android.example.github.vo.RepoSearchResult
 import com.android.example.github.vo.Resource
@@ -65,65 +65,13 @@ class RepoRepository @Inject constructor(
 
             override fun loadFromDb() = repoDao.loadRepositories(owner)
 
-            override fun createCall() = githubService.getRepos(owner)
+            override fun createCall(): LiveData<ApiResponse<List<Repo>>> {
+                throw Exception("Not implemented")
+            }
 
             override fun onFetchFailed() {
                 repoListRateLimit.reset(owner)
             }
-        }.asLiveData()
-    }
-
-    fun loadRepo(owner: String, name: String): LiveData<Resource<Repo>> {
-        return object : NetworkBoundResource<Repo, Repo>(appExecutors) {
-            override fun saveCallResult(item: Repo) {
-                repoDao.insert(item)
-            }
-
-            override fun shouldFetch(data: Repo?) = data == null
-
-            override fun loadFromDb() = repoDao.load(
-                ownerLogin = owner,
-                name = name
-            )
-
-            override fun createCall() = githubService.getRepo(
-                owner = owner,
-                name = name
-            )
-        }.asLiveData()
-    }
-
-    fun loadContributors(owner: String, name: String): LiveData<Resource<List<Contributor>>> {
-        return object : NetworkBoundResource<List<Contributor>, List<Contributor>>(appExecutors) {
-            override fun saveCallResult(item: List<Contributor>) {
-                item.forEach {
-                    it.repoName = name
-                    it.repoOwner = owner
-                }
-                db.runInTransaction {
-                    repoDao.createRepoIfNotExists(
-                        Repo(
-                            id = Repo.UNKNOWN_ID,
-                            name = name,
-                            fullName = "$owner/$name",
-                            description = "",
-                            owner = Repo.Owner(owner, null),
-                            stars = 0,
-                            x = 0f,
-                            y = 0f
-                        )
-                    )
-                    repoDao.insertContributors(item)
-                }
-            }
-
-            override fun shouldFetch(data: List<Contributor>?): Boolean {
-                return data == null || data.isEmpty()
-            }
-
-            override fun loadFromDb() = repoDao.loadContributors(owner, name)
-
-            override fun createCall() = githubService.getContributors(owner, name)
         }.asLiveData()
     }
 
@@ -137,19 +85,26 @@ class RepoRepository @Inject constructor(
         return fetchNextSearchPageTask.liveData
     }
 
+    fun addRepos(repos: List<Repo>): List<Repo> {
+        val ids = repoDao.insertRepos(repos)
+        return repoDao.getReposFromRowids(ids)
+    }
+
     fun search(query: String): LiveData<Resource<List<Repo>>> {
         return object : NetworkBoundResource<List<Repo>, RepoSearchResponse>(appExecutors) {
 
             override fun saveCallResult(item: RepoSearchResponse) {
-                val repoIds = item.items.map { it.id }
-                val repoSearchResult = RepoSearchResult(
-                    query = query,
-                    repoIds = repoIds,
-                    totalCount = item.total,
-                    next = item.nextPage
-                )
+                val count = item.items.count()
+                item.items.forEach { repo ->  repo.count = count}
                 db.runInTransaction {
-                    repoDao.insertRepos(item.items)
+                   item.items = addRepos(item.items)
+                    val repoIds = item.items.map { it.id }
+                    val repoSearchResult = RepoSearchResult(
+                        query = query,
+                        repoIds = repoIds,
+                        totalCount = item.total,
+                        next = item.nextPage
+                    )
                     repoDao.insert(repoSearchResult)
                 }
             }

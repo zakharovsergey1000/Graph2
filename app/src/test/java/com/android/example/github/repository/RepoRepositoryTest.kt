@@ -30,7 +30,6 @@ import com.android.example.github.util.InstantAppExecutors
 import com.android.example.github.util.TestUtil
 import com.android.example.github.util.argumentCaptor
 import com.android.example.github.util.mock
-import com.android.example.github.vo.Contributor
 import com.android.example.github.vo.Repo
 import com.android.example.github.vo.RepoSearchResult
 import com.android.example.github.vo.Resource

@@ -44,7 +44,6 @@ import com.android.example.github.util.TestUtil
 import com.android.example.github.util.ViewModelUtil
 import com.android.example.github.util.disableProgressBarAnimations
 import com.android.example.github.util.mock
-import com.android.example.github.vo.Contributor
 import com.android.example.github.vo.Repo
 import com.android.example.github.vo.Resource
 import org.hamcrest.CoreMatchers.not

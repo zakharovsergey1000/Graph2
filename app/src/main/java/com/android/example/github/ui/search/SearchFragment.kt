@@ -87,7 +87,7 @@ class SearchFragment : Fragment(), Injectable {
             showFullName = true
         ) { repo ->
             findNavController().navigate(
-                    SearchFragmentDirections.showRepo(repo.owner.login, repo.name)
+                    SearchFragmentDirections.showRepo(repo.count.toString())
             )
         }
         binding.query = searchViewModel.query

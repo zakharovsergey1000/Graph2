@@ -38,13 +38,12 @@ class RepoListAdapter(
     appExecutors = appExecutors,
     diffCallback = object : DiffUtil.ItemCallback<Repo>() {
         override fun areItemsTheSame(oldItem: Repo, newItem: Repo): Boolean {
-            return oldItem.owner == newItem.owner
-                    && oldItem.name == newItem.name
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: Repo, newItem: Repo): Boolean {
-            return oldItem.description == newItem.description
-                    && oldItem.stars == newItem.stars
+            return oldItem.x == newItem.x
+                    && oldItem.y == newItem.y
         }
     }
 ) {

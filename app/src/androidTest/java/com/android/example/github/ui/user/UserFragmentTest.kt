@@ -42,7 +42,6 @@ import com.android.example.github.util.disableProgressBarAnimations
 import com.android.example.github.util.mock
 import com.android.example.github.vo.Repo
 import com.android.example.github.vo.Resource
-import com.android.example.github.vo.User
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Rule

@@ -29,7 +29,7 @@ data class RepoSearchResponse(
     @SerializedName("total_count")
     val total: Int = 0,
     @SerializedName("points")
-    val items: List<Repo>
+    var items: List<Repo>
 ) {
     var nextPage: Int? = null
 }

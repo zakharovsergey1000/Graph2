@@ -60,19 +60,6 @@ class RepoFragment : Fragment(), Injectable {
     var binding by autoCleared<RepoFragmentBinding>()
 
     private val params by navArgs<RepoFragmentArgs>()
-    private var adapter by autoCleared<ContributorAdapter>()
-
-    private fun initContributorList(viewModel: RepoViewModel) {
-        viewModel.contributors.observe(viewLifecycleOwner, Observer { listResource ->
-            // we don't need any null checks here for the adapter since LiveData guarantees that
-            // it won't call us if fragment is stopped or not started.
-            if (listResource?.data != null) {
-                adapter.submitList(listResource.data)
-            } else {
-                adapter.submitList(emptyList())
-            }
-        })
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -92,29 +79,5 @@ class RepoFragment : Fragment(), Injectable {
         binding = dataBinding
         sharedElementReturnTransition = TransitionInflater.from(context).inflateTransition(R.transition.move)
         return dataBinding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        repoViewModel.setId(params.owner, params.name)
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.repo = repoViewModel.repo
-
-        val adapter = ContributorAdapter(dataBindingComponent, appExecutors) {
-            contributor, imageView ->
-            val extras = FragmentNavigatorExtras(
-                    imageView to contributor.login
-            )
-            findNavController().navigate(
-                    RepoFragmentDirections.showUser(contributor.login, contributor.avatarUrl),
-                    extras
-            )
-        }
-        this.adapter = adapter
-        binding.contributorList.adapter = adapter
-        postponeEnterTransition()
-        binding.contributorList.doOnPreDraw {
-            startPostponedEnterTransition()
-        }
-        initContributorList(repoViewModel)
     }
 }
