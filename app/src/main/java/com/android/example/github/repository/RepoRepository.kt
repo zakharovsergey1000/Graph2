@@ -86,8 +86,13 @@ class RepoRepository @Inject constructor(
     }
 
     fun addRepos(repos: List<Repo>): List<Repo> {
-        val ids = repoDao.insertRepos(repos)
-        return repoDao.getReposFromRowids(ids)
+        val count = repos.count()
+        val list = mutableListOf<Repo> ()
+        for (i in 0..count step 999) {
+            val ids = repoDao.insertRepos(repos.subList(i, Math.min(i + 999, count) ))
+            list.addAll(repoDao.getReposFromRowids(ids))
+        }
+        return list
     }
 
     fun search(query: String): LiveData<Resource<List<Repo>>> {
@@ -109,16 +114,10 @@ class RepoRepository @Inject constructor(
                 }
             }
 
-            override fun shouldFetch(data: List<Repo>?) = data == null
+            override fun shouldFetch(data: List<Repo>?) = true
 
             override fun loadFromDb(): LiveData<List<Repo>> {
-                return repoDao.search(query).switchMap { searchData ->
-                    if (searchData == null) {
-                        AbsentLiveData.create()
-                    } else {
-                        repoDao.loadOrdered(searchData.repoIds)
-                    }
-                }
+                return repoDao.loadRepositories(query)
             }
 
             override fun createCall() = githubService.searchRepos(query)
