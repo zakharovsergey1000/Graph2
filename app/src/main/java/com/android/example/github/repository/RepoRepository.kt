@@ -85,7 +85,7 @@ class RepoRepository @Inject constructor(
         return fetchNextSearchPageTask.liveData
     }
 
-    fun addRepos(repos: List<Repo>): List<Repo> {
+    private fun addRepos(repos: List<Repo>): List<Repo> {
         val count = repos.count()
         val list = mutableListOf<Repo> ()
         for (i in 0..count step 999) {
