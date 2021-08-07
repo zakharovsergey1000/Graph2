@@ -30,14 +30,20 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionInflater
 import com.android.example.github.AppExecutors
 import com.android.example.github.R
 import com.android.example.github.binding.FragmentDataBindingComponent
 import com.android.example.github.databinding.RepoFragmentBinding
 import com.android.example.github.di.Injectable
+import com.android.example.github.ui.common.RepoListAdapter
 import com.android.example.github.ui.common.RetryCallback
+import com.android.example.github.ui.search.SearchFragmentDirections
 import com.android.example.github.util.autoCleared
+import com.android.example.github.vo.Status
+import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
 /**
@@ -60,6 +66,15 @@ class RepoFragment : Fragment(), Injectable {
     var binding by autoCleared<RepoFragmentBinding>()
 
     private val params by navArgs<RepoFragmentArgs>()
+    var adapter by autoCleared<RepoListAdapter>()
+
+    private fun initPointList(viewModel: RepoViewModel) {
+        viewModel.points.observe(viewLifecycleOwner, Observer { listResource ->
+            // we don't need any null checks here for the adapter since LiveData guarantees that
+            // it won't call us if fragment is stopped or not started.
+            adapter.submitList(listResource)
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,13 +86,33 @@ class RepoFragment : Fragment(), Injectable {
             container,
             false
         )
-        dataBinding.retryCallback = object : RetryCallback {
-            override fun retry() {
-                repoViewModel.retry()
-            }
-        }
         binding = dataBinding
         sharedElementReturnTransition = TransitionInflater.from(context).inflateTransition(R.transition.move)
         return dataBinding.root
     }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        repoViewModel.setId(params.points)
+        binding.lifecycleOwner = viewLifecycleOwner
+        val rvAdapter = RepoListAdapter(
+            dataBindingComponent = dataBindingComponent,
+            appExecutors = appExecutors,
+            showFullName = true
+        ) { repo ->
+            findNavController().navigate(
+                SearchFragmentDirections.showRepo(repo.count.toString())
+            )
+        }
+        binding.repoList.adapter = rvAdapter
+        adapter = rvAdapter
+
+        initPointList(repoViewModel)
+    }
+
+    private fun initRecyclerView() {
+
+
+    }
+
 }

@@ -29,25 +29,16 @@ import javax.inject.Inject
 
 @OpenForTesting
 class RepoViewModel @Inject constructor(repository: RepoRepository) : ViewModel() {
-    private val _repoId: MutableLiveData<RepoId> = MutableLiveData()
-    val repoId: LiveData<RepoId>
+    private val _repoId: MutableLiveData<String> = MutableLiveData()
+    val repoId: LiveData<String>
         get() = _repoId
 
-
-    fun retry() {
-        val owner = _repoId.value?.owner
-        val name = _repoId.value?.name
-        if (owner != null && name != null) {
-            _repoId.value = RepoId(owner, name)
-        }
+    val points: LiveData<List<Repo>> =_repoId.switchMap { input ->
+        repository.loadRepos(input)
     }
 
-    fun setId(owner: String, name: String) {
-        val update = RepoId(owner, name)
-        if (_repoId.value == update) {
-            return
-        }
-        _repoId.value = update
+    fun setId(owner: String) {
+        _repoId.value = owner
     }
 
     data class RepoId(val owner: String, val name: String) {

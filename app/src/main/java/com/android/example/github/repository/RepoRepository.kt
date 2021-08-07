@@ -53,26 +53,8 @@ class RepoRepository @Inject constructor(
 
     private val repoListRateLimit = RateLimiter<String>(10, TimeUnit.MINUTES)
 
-    fun loadRepos(owner: String): LiveData<Resource<List<Repo>>> {
-        return object : NetworkBoundResource<List<Repo>, List<Repo>>(appExecutors) {
-            override fun saveCallResult(item: List<Repo>) {
-                repoDao.insertRepos(item)
-            }
-
-            override fun shouldFetch(data: List<Repo>?): Boolean {
-                return data == null || data.isEmpty() || repoListRateLimit.shouldFetch(owner)
-            }
-
-            override fun loadFromDb() = repoDao.loadRepositories(owner)
-
-            override fun createCall(): LiveData<ApiResponse<List<Repo>>> {
-                throw Exception("Not implemented")
-            }
-
-            override fun onFetchFailed() {
-                repoListRateLimit.reset(owner)
-            }
-        }.asLiveData()
+    fun loadRepos(owner: String): LiveData<List<Repo>> {
+        return repoDao.loadRepositories(owner)
     }
 
     fun searchNextPage(query: String): LiveData<Resource<Boolean>> {

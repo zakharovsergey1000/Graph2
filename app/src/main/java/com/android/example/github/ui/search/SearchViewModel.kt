@@ -27,6 +27,7 @@ import com.android.example.github.util.AbsentLiveData
 import com.android.example.github.vo.Repo
 import com.android.example.github.vo.Resource
 import com.android.example.github.vo.Status
+import com.hadilq.liveevent.LiveEvent
 import java.util.Locale
 import javax.inject.Inject
 
@@ -46,6 +47,7 @@ class SearchViewModel @Inject constructor(repoRepository: RepoRepository) : View
         }
     }
 
+    val resultsOnce = results.toSingleEvent()
     val loadMoreStatus: LiveData<LoadMoreState>
         get() = nextPageHandler.loadMoreState
 
@@ -160,4 +162,12 @@ class SearchViewModel @Inject constructor(repoRepository: RepoRepository) : View
             )
         }
     }
+}
+
+fun <T> LiveData<T>.toSingleEvent(): LiveData<T> {
+    val result = LiveEvent<T>()
+    result.addSource(this) {
+        result.value = it
+    }
+    return result
 }

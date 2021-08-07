@@ -42,6 +42,7 @@ import com.android.example.github.di.Injectable
 import com.android.example.github.ui.common.RepoListAdapter
 import com.android.example.github.ui.common.RetryCallback
 import com.android.example.github.util.autoCleared
+import com.android.example.github.vo.Status
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
@@ -57,7 +58,6 @@ class SearchFragment : Fragment(), Injectable {
 
     var binding by autoCleared<SearchFragmentBinding>()
 
-    var adapter by autoCleared<RepoListAdapter>()
 
     val searchViewModel: SearchViewModel by viewModels {
         viewModelFactory
@@ -80,20 +80,14 @@ class SearchFragment : Fragment(), Injectable {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.lifecycleOwner = viewLifecycleOwner
-        initRecyclerView()
-        val rvAdapter = RepoListAdapter(
-            dataBindingComponent = dataBindingComponent,
-            appExecutors = appExecutors,
-            showFullName = true
-        ) { repo ->
-            findNavController().navigate(
-                    SearchFragmentDirections.showRepo(repo.count.toString())
-            )
-        }
+        searchViewModel.resultsOnce.observe(viewLifecycleOwner, Observer { result ->
+            if (result?.status == Status.SUCCESS) {
+                findNavController().navigate(
+                    SearchFragmentDirections.showRepo(result.data!!.get(0).count.toString())
+                )
+            }
+        })
         binding.query = searchViewModel.query
-        binding.repoList.adapter = rvAdapter
-        adapter = rvAdapter
-
         initSearchInputListener()
 
         binding.callback = object : RetryCallback {
@@ -129,34 +123,6 @@ class SearchFragment : Fragment(), Injectable {
         searchViewModel.setQuery(query)
     }
 
-    private fun initRecyclerView() {
-
-        binding.repoList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                val lastPosition = layoutManager.findLastVisibleItemPosition()
-                if (lastPosition == adapter.itemCount - 1) {
-                    searchViewModel.loadNextPage()
-                }
-            }
-        })
-        binding.searchResult = searchViewModel.results
-        searchViewModel.results.observe(viewLifecycleOwner, Observer { result ->
-            adapter.submitList(result?.data)
-        })
-
-        searchViewModel.loadMoreStatus.observe(viewLifecycleOwner, Observer { loadingMore ->
-            if (loadingMore == null) {
-                binding.loadingMore = false
-            } else {
-                binding.loadingMore = loadingMore.isRunning
-                val error = loadingMore.errorMessageIfNotHandled
-                if (error != null) {
-                    Snackbar.make(binding.loadMoreBar, error, Snackbar.LENGTH_LONG).show()
-                }
-            }
-        })
-    }
 
     private fun dismissKeyboard(windowToken: IBinder) {
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
