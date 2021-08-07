@@ -63,6 +63,9 @@ android {
         lintConfig rootProject.file('lint.xml')
     }
 }
+repositories {
+    maven { url 'https://jitpack.io' }
+}
 
 dependencies {
     implementation deps.app_compat
@@ -116,7 +119,7 @@ dependencies {
     androidTestImplementation deps.mockito.core
     androidTestImplementation deps.mockito.android
     implementation "com.github.hadilq:live-event:1.3.0"
-
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }
 
 // we need all open to run tests which we enable only for debug builds.

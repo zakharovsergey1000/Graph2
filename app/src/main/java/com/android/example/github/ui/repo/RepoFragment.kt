@@ -20,18 +20,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.doOnPreDraw
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionInflater
 import com.android.example.github.AppExecutors
 import com.android.example.github.R
@@ -39,12 +35,13 @@ import com.android.example.github.binding.FragmentDataBindingComponent
 import com.android.example.github.databinding.RepoFragmentBinding
 import com.android.example.github.di.Injectable
 import com.android.example.github.ui.common.RepoListAdapter
-import com.android.example.github.ui.common.RetryCallback
 import com.android.example.github.ui.search.SearchFragmentDirections
 import com.android.example.github.util.autoCleared
-import com.android.example.github.vo.Status
-import com.google.android.material.snackbar.Snackbar
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import javax.inject.Inject
+
 
 /**
  * The UI Controller for displaying a Github Repo's information with its contributors.
@@ -73,6 +70,18 @@ class RepoFragment : Fragment(), Injectable {
             // we don't need any null checks here for the adapter since LiveData guarantees that
             // it won't call us if fragment is stopped or not started.
             adapter.submitList(listResource)
+            val entries: MutableList<Entry> = ArrayList()
+            for (data in listResource) {
+                // turn your data into Entry objects
+                entries.add(Entry(data.x, data.y))
+            }
+            val dataSet: LineDataSet =  LineDataSet(entries, "Label") // add entries to dataset
+//            dataSet.setColor(...);
+//            dataSet.setValueTextColor(...); // styling, ...
+            val lineData = LineData(dataSet)
+            binding.chart1.setData(lineData)
+            binding.chart1.invalidate() // refresh
+
         })
     }
 
