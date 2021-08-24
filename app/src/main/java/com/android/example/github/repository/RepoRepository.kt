@@ -84,7 +84,8 @@ class RepoRepository @Inject constructor(
                 val count = item.items.count()
                 item.items.forEach { repo ->  repo.count = count}
                 db.runInTransaction {
-                   item.items = addRepos(item.items)
+                    repoDao.deleteRepositories(count.toString())
+                    item.items = addRepos(item.items)
                     val repoIds = item.items.map { it.id }
                     val repoSearchResult = RepoSearchResult(
                         query = query,

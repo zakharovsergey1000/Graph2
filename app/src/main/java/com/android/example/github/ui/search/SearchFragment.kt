@@ -80,6 +80,7 @@ class SearchFragment : Fragment(), Injectable {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.searchResult = searchViewModel.results
         searchViewModel.resultsOnce.observe(viewLifecycleOwner, Observer { result ->
             if (result?.status == Status.SUCCESS) {
                 findNavController().navigate(

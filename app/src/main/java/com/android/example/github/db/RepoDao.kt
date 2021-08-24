@@ -54,6 +54,13 @@ abstract class RepoDao {
     )
     abstract fun loadRepositories(count: String): LiveData<List<Repo>>
 
+    @Query(
+        """
+        DELETE FROM Repo
+        WHERE count = :count"""
+    )
+    abstract fun deleteRepositories(count: String)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(result: RepoSearchResult)
 

@@ -23,9 +23,13 @@
 
         <import type="com.android.example.github.vo.Status" />
 
+        <import type="com.android.example.github.vo.Repo" />
+
+        <import type="java.util.List" />
+
         <variable
             name="resource"
-            type="Resource" />
+            type="Resource&lt;List&lt;Repo>>" />
 
         <variable
             name="callback"
@@ -34,7 +38,7 @@
 
     <LinearLayout
         android:orientation="vertical"
-        app:visibleGone="@{resource.data == null}"
+        app:visibleGone="@{resource.data == null || resource.data.size() == 0}"
         android:layout_width="wrap_content"
         android:gravity="center"
         android:padding="@dimen/default_margin"
