@@ -38,7 +38,6 @@
 
     <LinearLayout
         android:orientation="vertical"
-        app:visibleGone="@{resource.data == null || resource.data.size() == 0}"
         android:layout_width="wrap_content"
         android:gravity="center"
         android:padding="@dimen/default_margin"
@@ -55,10 +54,10 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/retry"
+            android:text="@{resource.status == Status.ERROR ? @string/retry : @string/go}"
             android:id="@+id/retry"
             android:onClick="@{() -> callback.retry()}"
-            app:visibleGone="@{resource.status == Status.ERROR}" />
+            app:visibleGone="@{resource.status != Status.LOADING}" />
 
         <TextView
             android:layout_width="wrap_content"

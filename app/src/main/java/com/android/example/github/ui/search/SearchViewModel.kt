@@ -54,7 +54,7 @@ class SearchViewModel @Inject constructor(repoRepository: RepoRepository) : View
     fun setQuery(originalInput: String) {
         val input = originalInput.toLowerCase(Locale.getDefault()).trim()
         if (input == _query.value) {
-            return
+            //return
         }
         nextPageHandler.reset()
         _query.value = input

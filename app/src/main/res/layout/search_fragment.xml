@@ -64,8 +64,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/input"
-                android:inputType="textNoSuggestions"
-                android:imeOptions="actionSearch"
+                android:inputType="number"
+                android:imeOptions="actionGo"
                 android:hint="@string/search_hint"
                 tools:text="google" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -79,34 +79,6 @@
             app:visibleGone="@{loadingMore}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/repo_list"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:layoutManager="LinearLayoutManager"
-            app:layout_constraintBottom_toTopOf="@id/load_more_bar"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"
-            app:layout_constraintVertical_bias="1.0"
-            tools:listitem="@layout/repo_item" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{@string/empty_search_result(query)}"
-            android:id="@+id/no_results_text"
-            app:visibleGone="@{searchResult.status == Status.SUCCESS &amp;&amp; searchResult.data.size == 0}"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteY="247dp"
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <include

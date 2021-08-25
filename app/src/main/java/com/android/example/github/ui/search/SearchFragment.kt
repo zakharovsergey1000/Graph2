@@ -93,7 +93,7 @@ class SearchFragment : Fragment(), Injectable {
 
         binding.callback = object : RetryCallback {
             override fun retry() {
-                searchViewModel.refresh()
+                doSearch(binding.input)
             }
         }
     }
