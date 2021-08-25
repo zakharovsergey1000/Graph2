@@ -22,7 +22,7 @@
 ext.deps = [:]
 def versions = [:]
 versions.activity = '1.1.0'
-versions.android_gradle_plugin = '4.2.2'
+versions.android_gradle_plugin = '7.0.1'
 versions.annotations = "1.0.0"
 versions.apache_commons = "2.5"
 versions.appcompat = "1.2.0-alpha02"
@@ -50,7 +50,7 @@ versions.mockito = "2.25.0"
 versions.mockito_all = "1.10.19"
 versions.mockito_android = "2.25.0"
 versions.mockwebserver = "3.8.1"
-versions.navigation = "2.3.0-alpha01"
+versions.navigation = "2.3.5"
 versions.okhttp_logging_interceptor = "3.9.0"
 versions.paging = "3.0.0-beta01"
 versions.recyclerview = "1.2.0-beta01"
