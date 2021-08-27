@@ -17,9 +17,8 @@
 package com.android.example.github.ui.repo
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.text.format.DateFormat
+import android.view.*
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -40,6 +39,8 @@ import com.android.example.github.util.autoCleared
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.google.android.material.snackbar.Snackbar
+import java.util.*
 import javax.inject.Inject
 
 
@@ -84,6 +85,11 @@ class RepoFragment : Fragment(), Injectable {
 
         })
     }
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        // TODO Auto-generated method stub
+        super.onActivityCreated(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -100,6 +106,32 @@ class RepoFragment : Fragment(), Injectable {
         return dataBinding.root
     }
 
+    override fun onCreateOptionsMenu(menu: Menu,  menuInflater:MenuInflater) {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.points, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return when (item.itemId) {
+            R.id.save -> {
+                saveToPicture()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun saveToPicture() {
+        val dateTimeStr = DateFormat.format("yyyyMMdd_hhmmss", Date())
+        val fileName = "points_" + dateTimeStr
+        var success = binding.chart1.saveToGallery(fileName)
+        if (success) {
+            Snackbar.make(binding.chart1, "Saved as: " + fileName, 3000).show()
+        } else {
+            Snackbar.make(binding.chart1, "Unable to save", 3000).show()
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         repoViewModel.setId(params.points)
