@@ -86,11 +86,6 @@ class RepoFragment : Fragment(), Injectable {
 
         })
     }
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        // TODO Auto-generated method stub
-        super.onActivityCreated(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -135,6 +130,7 @@ class RepoFragment : Fragment(), Injectable {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
         repoViewModel.setId(params.points)
         binding.lifecycleOwner = viewLifecycleOwner
         val rvAdapter = RepoListAdapter(
