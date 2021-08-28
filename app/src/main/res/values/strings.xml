@@ -26,4 +26,6 @@
     <string name="empty_search_result">No results for <b>%s</b></string>
     <string name="a11y_contributor_avatar">contributor avatar</string>
     <string name="save_to_picture">Save to picture</string>
+    <string name="toggle_basic_cubic">Toggle basic or cubic</string>
+    <string name="line_data_set_mode_key">LineDataSetMode</string>
 </resources>

@@ -25,10 +25,13 @@ import com.android.example.github.testing.OpenForTesting
 import com.android.example.github.util.AbsentLiveData
 import com.android.example.github.vo.Repo
 import com.android.example.github.vo.Resource
+import com.github.mikephil.charting.data.LineDataSet
 import javax.inject.Inject
 
 @OpenForTesting
 class RepoViewModel @Inject constructor(repository: RepoRepository) : ViewModel() {
+    lateinit var dataSet: LineDataSet
+    var listResource: List<Repo>? = null
     private val _repoId: MutableLiveData<String> = MutableLiveData()
     val repoId: LiveData<String>
         get() = _repoId
@@ -38,7 +41,9 @@ class RepoViewModel @Inject constructor(repository: RepoRepository) : ViewModel(
     }
 
     fun setId(owner: String) {
-        _repoId.value = owner
+        if (_repoId.value != owner) {
+            _repoId.value = owner
+        }
     }
 
     data class RepoId(val owner: String, val name: String) {

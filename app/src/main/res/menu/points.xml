@@ -4,4 +4,7 @@
     <item
         android:id="@+id/save"
         android:title="@string/save_to_picture" />
+    <item
+        android:id="@+id/toggle_basic_cubic"
+        android:title="@string/toggle_basic_cubic" />
 </menu>

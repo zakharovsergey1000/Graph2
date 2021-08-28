@@ -16,6 +16,7 @@
 
 package com.android.example.github.ui.repo
 
+import android.content.Context
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.view.*
@@ -71,19 +72,33 @@ class RepoFragment : Fragment(), Injectable {
         viewModel.points.observe(viewLifecycleOwner, Observer { listResource ->
             // we don't need any null checks here for the adapter since LiveData guarantees that
             // it won't call us if fragment is stopped or not started.
-            adapter.submitList(listResource)
-            val entries: MutableList<Entry> = ArrayList()
-            for (data in listResource) {
-                // turn your data into Entry objects
-                entries.add(Entry(data.x, data.y))
-            }
-            val dataSet: LineDataSet =  LineDataSet(entries, "Label") // add entries to dataset
+            if (viewModel.listResource != listResource) {
+                viewModel.listResource = listResource
+                val entries: MutableList<Entry> = ArrayList()
+                for (data in listResource) {
+                    // turn your data into Entry objects
+                    entries.add(Entry(data.x, data.y))
+                }
+                viewModel.dataSet = LineDataSet(entries, "Label") // add entries to dataset
+                val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+                if (sharedPref!!.getInt(
+                        getString(R.string.line_data_set_mode_key),
+                        LineDataSet.Mode.LINEAR.ordinal
+                    ) == LineDataSet.Mode.CUBIC_BEZIER.ordinal
+                ) {
+                    viewModel.dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER)
+                    viewModel.dataSet.setCubicIntensity(0.2f)
+                } else {
+                    viewModel.dataSet.setMode(LineDataSet.Mode.LINEAR)
+                }
+
 //            dataSet.setColor(...);
 //            dataSet.setValueTextColor(...); // styling, ...
-            val lineData = LineData(dataSet)
+            }
+            adapter.submitList(viewModel.listResource)
+            val lineData = LineData(viewModel.dataSet)
             binding.chart1.setData(lineData)
             binding.chart1.invalidate() // refresh
-
         })
     }
 
@@ -145,9 +160,24 @@ class RepoFragment : Fragment(), Injectable {
                 true
             }
             R.id.toggle_basic_cubic -> {
-                val dataSetByIndex = binding.chart1.data.getDataSetByIndex(0)
-                val mode = if (dataSetByIndex.mode == LineDataSet.Mode.LINEAR) LineDataSet.Mode.LINEAR else LineDataSet.Mode.LINEAR
-                dataSetByIndex.
+                val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+                if (sharedPref!!.getInt(getString(R.string.line_data_set_mode_key), LineDataSet.Mode.LINEAR.ordinal) == LineDataSet.Mode.LINEAR.ordinal) {
+                    with (sharedPref.edit()) {
+                        putInt(getString(R.string.line_data_set_mode_key), LineDataSet.Mode.CUBIC_BEZIER.ordinal)
+                        apply()
+                    }
+                    repoViewModel.dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER)
+                    repoViewModel.dataSet.setCubicIntensity(0.2f)
+                } else {
+                    with (sharedPref.edit()) {
+                        putInt(getString(R.string.line_data_set_mode_key), LineDataSet.Mode.LINEAR.ordinal)
+                        apply()
+                    }
+                    repoViewModel.dataSet.setMode(LineDataSet.Mode.LINEAR)
+                }
+                val lineData = LineData(repoViewModel.dataSet)
+                binding.chart1.setData(lineData)
+                binding.chart1.invalidate() // refresh
                 true
             }
             else -> super.onOptionsItemSelected(item)
