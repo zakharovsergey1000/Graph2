@@ -102,22 +102,6 @@ class RepoFragment : Fragment(), Injectable {
         return dataBinding.root
     }
 
-    override fun onCreateOptionsMenu(menu: Menu,  menuInflater:MenuInflater) {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.points, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle item selection
-        return when (item.itemId) {
-            R.id.save -> {
-                saveToPicture()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
     private fun saveToPicture() {
         val dateTimeStr = DateFormat.format("yyyyMMdd_hhmmss", Date())
         val fileName = "points_" + dateTimeStr
@@ -146,6 +130,28 @@ class RepoFragment : Fragment(), Injectable {
         adapter = rvAdapter
 
         initPointList(repoViewModel)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu,  menuInflater:MenuInflater) {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.points, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return when (item.itemId) {
+            R.id.save -> {
+                saveToPicture()
+                true
+            }
+            R.id.toggle_basic_cubic -> {
+                val dataSetByIndex = binding.chart1.data.getDataSetByIndex(0)
+                val mode = if (dataSetByIndex.mode == LineDataSet.Mode.LINEAR) LineDataSet.Mode.LINEAR else LineDataSet.Mode.LINEAR
+                dataSetByIndex.
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun initRecyclerView() {
