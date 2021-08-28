@@ -31,10 +31,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Repository that handles Repo instances.
+ * Repository that handles Point instances.
  *
- * unfortunate naming :/ .
- * Repo - value object name
+ * Point - value object name
  * Repository - type of this class.
  */
 @Singleton
@@ -48,16 +47,6 @@ class PointsRepository @Inject constructor(
 
     fun loadPoints(owner: String): LiveData<List<Point>> {
         return pointDao.loadPoints(owner)
-    }
-
-    fun searchNextPage(query: String): LiveData<Resource<Boolean>> {
-        val fetchNextSearchPageTask = FetchNextSearchPageTask(
-            query = query,
-            pointsService = pointsService,
-            db = db
-        )
-        appExecutors.networkIO().execute(fetchNextSearchPageTask)
-        return fetchNextSearchPageTask.liveData
     }
 
     private fun addPoints(points: List<Point>): List<Point> {

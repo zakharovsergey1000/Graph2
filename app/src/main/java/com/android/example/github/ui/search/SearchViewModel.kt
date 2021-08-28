@@ -60,14 +60,6 @@ class SearchViewModel @Inject constructor(pointsRepository: PointsRepository) : 
         _query.value = input
     }
 
-    fun loadNextPage() {
-        _query.value?.let {
-            if (it.isNotBlank()) {
-                nextPageHandler.queryNextPage(it)
-            }
-        }
-    }
-
     fun refresh() {
         _query.value?.let {
             _query.value = it
@@ -97,20 +89,6 @@ class SearchViewModel @Inject constructor(pointsRepository: PointsRepository) : 
 
         init {
             reset()
-        }
-
-        fun queryNextPage(query: String) {
-            if (this.query == query) {
-                return
-            }
-            unregister()
-            this.query = query
-            nextPageLiveData = repository.searchNextPage(query)
-            loadMoreState.value = LoadMoreState(
-                isRunning = true,
-                errorMessage = null
-            )
-            nextPageLiveData?.observeForever(this)
         }
 
         override fun onChanged(result: Resource<Boolean>?) {
