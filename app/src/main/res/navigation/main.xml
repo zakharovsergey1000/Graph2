@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/repoFragment"
-        android:name="com.android.example.github.ui.repo.RepoFragment"
+        android:name="com.android.example.github.ui.point.PointsFragment"
         android:label="RepoFragment" >
         <argument
             android:name="points"

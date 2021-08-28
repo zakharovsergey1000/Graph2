@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.example.github.ui.repo
+package com.android.example.github.ui.point
 
 import android.content.Context
 import androidx.annotation.StringRes
@@ -44,7 +44,7 @@ import com.android.example.github.util.TestUtil
 import com.android.example.github.util.ViewModelUtil
 import com.android.example.github.util.disableProgressBarAnimations
 import com.android.example.github.util.mock
-import com.android.example.github.vo.Repo
+import com.android.example.github.vo.Point
 import com.android.example.github.vo.Resource
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
@@ -60,7 +60,7 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 
 @RunWith(AndroidJUnit4::class)
-class RepoFragmentTest {
+class PointFragmentTest {
     @Rule
     @JvmField
     val executorRule = TaskExecutorWithIdlingResourceRule()
@@ -72,21 +72,21 @@ class RepoFragmentTest {
     val dataBindingIdlingResourceRule = DataBindingIdlingResourceRule()
 
     private val navController = mock<NavController>()
-    private val repoLiveData = MutableLiveData<Resource<Repo>>()
+    private val repoLiveData = MutableLiveData<Resource<Point>>()
     private val contributorsLiveData = MutableLiveData<Resource<List<Contributor>>>()
-    private lateinit var viewModel: RepoViewModel
+    private lateinit var viewModel: PointsViewModel
     private lateinit var mockBindingAdapter: FragmentBindingAdapters
 
     @Before
     fun init() {
-        viewModel = mock(RepoViewModel::class.java)
+        viewModel = mock(PointsViewModel::class.java)
         mockBindingAdapter = mock(FragmentBindingAdapters::class.java)
         doNothing().`when`(viewModel).setId(anyString(), anyString())
         `when`(viewModel.repo).thenReturn(repoLiveData)
         `when`(viewModel.contributors).thenReturn(contributorsLiveData)
         val scenario = launchFragmentInContainer(
-                RepoFragmentArgs("a", "b").toBundle()) {
-            RepoFragment().apply {
+                PointsFragmentArgs("a", "b").toBundle()) {
+            PointsFragment().apply {
                 appExecutors = countingAppExecutors.appExecutors
                 viewModelFactory = ViewModelUtil.createFor(viewModel)
                 dataBindingComponent = object : DataBindingComponent {
@@ -201,7 +201,7 @@ class RepoFragmentTest {
         val repo = TestUtil.createRepo("foo", "bar", "desc")
         val contributors = names.mapIndexed { index, name ->
             TestUtil.createContributor(
-                repo = repo,
+                point = repo,
                 login = name,
                 contributions = 100 - index
             )

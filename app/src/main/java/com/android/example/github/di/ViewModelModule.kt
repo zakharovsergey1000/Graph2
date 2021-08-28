@@ -19,7 +19,7 @@ package com.android.example.github.di
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-import com.android.example.github.ui.repo.RepoViewModel
+import com.android.example.github.ui.point.PointsViewModel
 import com.android.example.github.ui.search.SearchViewModel
 import com.android.example.github.viewmodel.GithubViewModelFactory
 
@@ -37,8 +37,8 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(RepoViewModel::class)
-    abstract fun bindRepoViewModel(repoViewModel: RepoViewModel): ViewModel
+    @ViewModelKey(PointsViewModel::class)
+    abstract fun bindRepoViewModel(pointsViewModel: PointsViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: GithubViewModelFactory): ViewModelProvider.Factory

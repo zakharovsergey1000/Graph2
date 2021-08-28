@@ -20,18 +20,18 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.android.example.github.api.ApiResponse
-import com.android.example.github.api.GithubService
-import com.android.example.github.api.RepoSearchResponse
-import com.android.example.github.db.GithubDb
-import com.android.example.github.db.RepoDao
+import com.android.example.github.api.PointsService
+import com.android.example.github.api.GetPointsResponse
+import com.android.example.github.db.PointsDb
+import com.android.example.github.db.PointDao
 import com.android.example.github.util.AbsentLiveData
 import com.android.example.github.util.ApiUtil.successCall
 import com.android.example.github.util.InstantAppExecutors
 import com.android.example.github.util.TestUtil
 import com.android.example.github.util.argumentCaptor
 import com.android.example.github.util.mock
-import com.android.example.github.vo.Repo
-import com.android.example.github.vo.RepoSearchResult
+import com.android.example.github.vo.Point
+import com.android.example.github.vo.PointSearchResult
 import com.android.example.github.vo.Resource
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
@@ -52,25 +52,25 @@ import org.mockito.Mockito.verifyNoMoreInteractions
 import retrofit2.Response
 
 @RunWith(JUnit4::class)
-class RepoRepositoryTest {
-    private lateinit var repository: RepoRepository
-    private val dao = mock(RepoDao::class.java)
-    private val service = mock(GithubService::class.java)
+class PointRepositoryTest {
+    private lateinit var repository: PointsRepository
+    private val dao = mock(PointDao::class.java)
+    private val service = mock(PointsService::class.java)
     @Rule
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
 
     @Before
     fun init() {
-        val db = mock(GithubDb::class.java)
+        val db = mock(PointsDb::class.java)
         `when`(db.repoDao()).thenReturn(dao)
         `when`(db.runInTransaction(ArgumentMatchers.any())).thenCallRealMethod()
-        repository = RepoRepository(InstantAppExecutors(), db, dao, service)
+        repository = PointsRepository(InstantAppExecutors(), db, dao, service)
     }
 
     @Test
     fun loadRepoFromNetwork() {
-        val dbData = MutableLiveData<Repo>()
+        val dbData = MutableLiveData<Point>()
         `when`(dao.load("foo", "bar")).thenReturn(dbData)
 
         val repo = TestUtil.createRepo("foo", "bar", "desc")
@@ -81,11 +81,11 @@ class RepoRepositoryTest {
         verify(dao).load("foo", "bar")
         verifyNoMoreInteractions(service)
 
-        val observer = mock<Observer<Resource<Repo>>>()
+        val observer = mock<Observer<Resource<Point>>>()
         data.observeForever(observer)
         verifyNoMoreInteractions(service)
         verify(observer).onChanged(Resource.loading(null))
-        val updatedDbData = MutableLiveData<Repo>()
+        val updatedDbData = MutableLiveData<Point>()
         `when`(dao.load("foo", "bar")).thenReturn(updatedDbData)
 
         dbData.postValue(null)
@@ -153,9 +153,9 @@ class RepoRepositoryTest {
     fun search_fromDb() {
         val ids = arrayListOf(1, 2)
 
-        val observer = mock<Observer<Resource<List<Repo>>>>()
-        val dbSearchResult = MutableLiveData<RepoSearchResult>()
-        val repositories = MutableLiveData<List<Repo>>()
+        val observer = mock<Observer<Resource<List<Point>>>>()
+        val dbSearchResult = MutableLiveData<PointSearchResult>()
+        val repositories = MutableLiveData<List<Point>>()
 
         `when`(dao.search("foo")).thenReturn(dbSearchResult)
 
@@ -165,12 +165,12 @@ class RepoRepositoryTest {
         verifyNoMoreInteractions(service)
         reset(observer)
 
-        val dbResult = RepoSearchResult("foo", ids, 2, null)
+        val dbResult = PointSearchResult("foo", ids, 2, null)
         `when`(dao.loadOrdered(ids)).thenReturn(repositories)
 
         dbSearchResult.postValue(dbResult)
 
-        val repoList = arrayListOf<Repo>()
+        val repoList = arrayListOf<Point>()
         repositories.postValue(repoList)
         verify(observer).onChanged(Resource.success(repoList))
         verifyNoMoreInteractions(service)
@@ -182,15 +182,15 @@ class RepoRepositoryTest {
         val repo1 = TestUtil.createRepo(1, "owner", "repo 1", "desc 1")
         val repo2 = TestUtil.createRepo(2, "owner", "repo 2", "desc 2")
 
-        val observer = mock<Observer<Resource<List<Repo>>>>()
-        val dbSearchResult = MutableLiveData<RepoSearchResult>()
-        val repositories = MutableLiveData<List<Repo>>()
+        val observer = mock<Observer<Resource<List<Point>>>>()
+        val dbSearchResult = MutableLiveData<PointSearchResult>()
+        val repositories = MutableLiveData<List<Point>>()
 
         val repoList = arrayListOf(repo1, repo2)
-        val apiResponse = RepoSearchResponse(2, repoList)
+        val apiResponse = GetPointsResponse(2, repoList)
 
-        val callLiveData = MutableLiveData<ApiResponse<RepoSearchResponse>>()
-        `when`(service.searchRepos("foo")).thenReturn(callLiveData)
+        val callLiveData = MutableLiveData<ApiResponse<GetPointsResponse>>()
+        `when`(service.getPoints("foo")).thenReturn(callLiveData)
 
         `when`(dao.search("foo")).thenReturn(dbSearchResult)
 
@@ -204,13 +204,13 @@ class RepoRepositoryTest {
         dbSearchResult.postValue(null)
         verify(dao, never()).loadOrdered(anyList())
 
-        verify(service).searchRepos("foo")
-        val updatedResult = MutableLiveData<RepoSearchResult>()
+        verify(service).getPoints("foo")
+        val updatedResult = MutableLiveData<PointSearchResult>()
         `when`(dao.search("foo")).thenReturn(updatedResult)
-        updatedResult.postValue(RepoSearchResult("foo", ids, 2, null))
+        updatedResult.postValue(PointSearchResult("foo", ids, 2, null))
 
         callLiveData.postValue(ApiResponse.create(Response.success(apiResponse)))
-        verify(dao).insertRepos(repoList)
+        verify(dao).insertPoints(repoList)
         repositories.postValue(repoList)
         verify(observer).onChanged(Resource.success(repoList))
         verifyNoMoreInteractions(service)
@@ -219,10 +219,10 @@ class RepoRepositoryTest {
     @Test
     fun search_fromServer_error() {
         `when`(dao.search("foo")).thenReturn(AbsentLiveData.create())
-        val apiResponse = MutableLiveData<ApiResponse<RepoSearchResponse>>()
-        `when`(service.searchRepos("foo")).thenReturn(apiResponse)
+        val apiResponse = MutableLiveData<ApiResponse<GetPointsResponse>>()
+        `when`(service.getPoints("foo")).thenReturn(apiResponse)
 
-        val observer = mock<Observer<Resource<List<Repo>>>>()
+        val observer = mock<Observer<Resource<List<Point>>>>()
         repository.search("foo").observeForever(observer)
         verify(observer).onChanged(Resource.loading(null))
 

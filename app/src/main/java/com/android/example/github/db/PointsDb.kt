@@ -14,22 +14,24 @@
  * limitations under the License.
  */
 
-package com.android.example.github.api
+package com.android.example.github.db
 
 
-import com.android.example.github.vo.Repo
-import com.google.gson.annotations.SerializedName
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import com.android.example.github.vo.Point
+import com.android.example.github.vo.PointSearchResult
 
 /**
- * Simple object to hold repo search responses. This is different from the Entity in the database
- * because we are keeping a search result in 1 row and denormalizing list of results into a single
- * column.
+ * Main database description.
  */
-data class RepoSearchResponse(
-    @SerializedName("total_count")
-    val total: Int = 0,
-    @SerializedName("points")
-    var items: List<Repo>
-) {
-    var nextPage: Int? = null
+@Database(
+    entities = [
+        Point::class,
+        PointSearchResult::class],
+    version = 8,
+    exportSchema = false
+)
+abstract class PointsDb : RoomDatabase() {
+    abstract fun repoDao(): PointDao
 }

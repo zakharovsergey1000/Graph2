@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.android.example.github.ui.repo
+package com.android.example.github.ui.point
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.android.example.github.repository.RepoRepository
+import com.android.example.github.repository.PointsRepository
 import com.android.example.github.util.mock
-import com.android.example.github.vo.Repo
+import com.android.example.github.vo.Point
 import com.android.example.github.vo.Resource
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -36,14 +36,14 @@ import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyNoMoreInteractions
 
 @RunWith(JUnit4::class)
-class RepoViewModelTest {
+class PointViewModelTest {
 
     @Rule
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    private val repository = mock(RepoRepository::class.java)
-    private var repoViewModel = RepoViewModel(repository)
+    private val repository = mock(PointsRepository::class.java)
+    private var repoViewModel = PointsViewModel(repository)
 
     @Test
     fun testNull() {
@@ -88,16 +88,16 @@ class RepoViewModelTest {
 
     @Test
     fun resetId() {
-        val observer = mock<Observer<RepoViewModel.RepoId>>()
+        val observer = mock<Observer<PointsViewModel.RepoId>>()
         repoViewModel.repoId.observeForever(observer)
         verifyNoMoreInteractions(observer)
         repoViewModel.setId("foo", "bar")
-        verify(observer).onChanged(RepoViewModel.RepoId("foo", "bar"))
+        verify(observer).onChanged(PointsViewModel.RepoId("foo", "bar"))
         reset(observer)
         repoViewModel.setId("foo", "bar")
         verifyNoMoreInteractions(observer)
         repoViewModel.setId("a", "b")
-        verify(observer).onChanged(RepoViewModel.RepoId("a", "b"))
+        verify(observer).onChanged(PointsViewModel.RepoId("a", "b"))
     }
 
     @Test
@@ -106,7 +106,7 @@ class RepoViewModelTest {
         verifyNoMoreInteractions(repository)
         repoViewModel.setId("foo", "bar")
         verifyNoMoreInteractions(repository)
-        val observer = mock<Observer<Resource<Repo>>>()
+        val observer = mock<Observer<Resource<Point>>>()
         repoViewModel.repo.observeForever(observer)
         verify(repository).loadRepo("foo", "bar")
         reset(repository)
@@ -117,7 +117,7 @@ class RepoViewModelTest {
     @Test
     fun blankRepoId() {
         repoViewModel.setId("", "")
-        val observer1 = mock<Observer<Resource<Repo>>>()
+        val observer1 = mock<Observer<Resource<Point>>>()
         val observer2 = mock<Observer<Resource<List<Contributor>>>>()
         repoViewModel.repo.observeForever(observer1)
         repoViewModel.contributors.observeForever(observer2)

@@ -24,50 +24,47 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.android.example.github.testing.OpenForTesting
-import com.android.example.github.vo.Repo
-import com.android.example.github.vo.RepoSearchResult
+import com.android.example.github.vo.Point
+import com.android.example.github.vo.PointSearchResult
 
 /**
- * Interface for database access on Repo related operations.
+ * Interface for database access on Point related operations.
  */
 @Dao
 @OpenForTesting
-abstract class RepoDao {
+abstract class PointDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(vararg repos: Repo)
+    abstract fun insert(vararg points: Point)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insertRepos(repositories: List<Repo>): LongArray
+    abstract fun insertPoints(points: List<Point>): LongArray
 
-    @Query("SELECT * FROM repo WHERE ROWID in (:rowid)")
-    abstract fun getReposFromRowids(rowid: LongArray): List<Repo>
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    abstract fun createRepoIfNotExists(repo: Repo): Long
+    @Query("SELECT * FROM Point WHERE ROWID in (:rowid)")
+    abstract fun getPointsFromRowids(rowid: LongArray): List<Point>
 
     @Query(
         """
-        SELECT * FROM Repo
+        SELECT * FROM Point
         WHERE count = :count
         ORDER BY x ASC"""
     )
-    abstract fun loadRepositories(count: String): LiveData<List<Repo>>
+    abstract fun loadPoints(count: String): LiveData<List<Point>>
 
     @Query(
         """
-        DELETE FROM Repo
+        DELETE FROM Point
         WHERE count = :count"""
     )
-    abstract fun deleteRepositories(count: String)
+    abstract fun deletePoints(count: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(result: RepoSearchResult)
+    abstract fun insert(result: PointSearchResult)
 
-    @Query("SELECT * FROM RepoSearchResult WHERE `query` = :query")
-    abstract fun search(query: String): LiveData<RepoSearchResult?>
+    @Query("SELECT * FROM PointSearchResult WHERE `query` = :query")
+    abstract fun search(query: String): LiveData<PointSearchResult?>
 
-    fun loadOrdered(repoIds: List<Int>): LiveData<List<Repo>> {
+    fun loadOrdered(repoIds: List<Int>): LiveData<List<Point>> {
         val order = SparseIntArray()
         repoIds.withIndex().forEach {
             order.put(it.value, it.index)
@@ -77,9 +74,9 @@ abstract class RepoDao {
         }
     }
 
-    @Query("SELECT * FROM Repo WHERE id in (:repoIds)")
-    protected abstract fun loadById(repoIds: List<Int>): LiveData<List<Repo>>
+    @Query("SELECT * FROM Point WHERE id in (:repoIds)")
+    protected abstract fun loadById(repoIds: List<Int>): LiveData<List<Point>>
 
-    @Query("SELECT * FROM RepoSearchResult WHERE `query` = :query")
-    abstract fun findSearchResult(query: String): RepoSearchResult?
+    @Query("SELECT * FROM PointSearchResult WHERE `query` = :query")
+    abstract fun findSearchResult(query: String): PointSearchResult?
 }

@@ -14,24 +14,20 @@
  * limitations under the License.
  */
 
-package com.android.example.github.db
+package com.android.example.github.api
 
-
-import androidx.room.Database
-import androidx.room.RoomDatabase
-import com.android.example.github.vo.Repo
-import com.android.example.github.vo.RepoSearchResult
+import androidx.lifecycle.LiveData
+import retrofit2.Call
+import retrofit2.http.GET
+import retrofit2.http.Query
 
 /**
- * Main database description.
+ * REST API access points
  */
-@Database(
-    entities = [
-        Repo::class,
-        RepoSearchResult::class],
-    version = 7,
-    exportSchema = false
-)
-abstract class GithubDb : RoomDatabase() {
-    abstract fun repoDao(): RepoDao
+interface PointsService {
+    @GET("api/test/points")
+    fun getPoints(@Query("count") query: String): LiveData<ApiResponse<GetPointsResponse>>
+
+    @GET("api/test/points")
+    fun getPoints(@Query("count") query: String, @Query("page") page: Int): Call<GetPointsResponse>
 }

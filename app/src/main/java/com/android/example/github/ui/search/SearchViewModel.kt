@@ -21,10 +21,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
-import com.android.example.github.repository.RepoRepository
+import com.android.example.github.repository.PointsRepository
 import com.android.example.github.testing.OpenForTesting
 import com.android.example.github.util.AbsentLiveData
-import com.android.example.github.vo.Repo
+import com.android.example.github.vo.Point
 import com.android.example.github.vo.Resource
 import com.android.example.github.vo.Status
 import com.hadilq.liveevent.LiveEvent
@@ -32,18 +32,18 @@ import java.util.Locale
 import javax.inject.Inject
 
 @OpenForTesting
-class SearchViewModel @Inject constructor(repoRepository: RepoRepository) : ViewModel() {
+class SearchViewModel @Inject constructor(pointsRepository: PointsRepository) : ViewModel() {
 
     private val _query = MutableLiveData<String>()
-    private val nextPageHandler = NextPageHandler(repoRepository)
+    private val nextPageHandler = NextPageHandler(pointsRepository)
 
     val query : LiveData<String> = _query
 
-    val results: LiveData<Resource<List<Repo>>> = _query.switchMap { search ->
+    val results: LiveData<Resource<List<Point>>> = _query.switchMap { search ->
         if (search.isBlank()) {
             AbsentLiveData.create()
         } else {
-            repoRepository.search(search)
+            pointsRepository.search(search)
         }
     }
 
@@ -87,7 +87,7 @@ class SearchViewModel @Inject constructor(repoRepository: RepoRepository) : View
             }
     }
 
-    class NextPageHandler(private val repository: RepoRepository) : Observer<Resource<Boolean>> {
+    class NextPageHandler(private val repository: PointsRepository) : Observer<Resource<Boolean>> {
         private var nextPageLiveData: LiveData<Resource<Boolean>>? = null
         val loadMoreState = MutableLiveData<LoadMoreState>()
         private var query: String? = null

@@ -38,9 +38,8 @@ import com.android.example.github.util.RecyclerViewMatcher
 import com.android.example.github.util.TaskExecutorWithIdlingResourceRule
 import com.android.example.github.util.TestUtil
 import com.android.example.github.util.ViewModelUtil
-import com.android.example.github.util.disableProgressBarAnimations
 import com.android.example.github.util.mock
-import com.android.example.github.vo.Repo
+import com.android.example.github.vo.Point
 import com.android.example.github.vo.Resource
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
@@ -68,7 +67,7 @@ class UserFragmentTest {
     private lateinit var mockBindingAdapter: FragmentBindingAdapters
     private val navController = mock<NavController>()
     private val userData = MutableLiveData<Resource<User>>()
-    private val repoListData = MutableLiveData<Resource<List<Repo>>>()
+    private val repoListData = MutableLiveData<Resource<List<Point>>>()
 
     @Before
     fun init() {
@@ -190,7 +189,7 @@ class UserFragmentTest {
 
     private fun listMatcher() = RecyclerViewMatcher(R.id.repo_list)
 
-    private fun setRepos(count: Int): List<Repo> {
+    private fun setRepos(count: Int): List<Point> {
         val repos = (0 until count).map {
             TestUtil.createRepo("foo", "name $it", "desc$it")
         }

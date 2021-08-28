@@ -14,30 +14,29 @@
  * limitations under the License.
  */
 
-package com.android.example.github.ui.repo
+package com.android.example.github.ui.point
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
-import com.android.example.github.repository.RepoRepository
+import com.android.example.github.repository.PointsRepository
 import com.android.example.github.testing.OpenForTesting
 import com.android.example.github.util.AbsentLiveData
-import com.android.example.github.vo.Repo
-import com.android.example.github.vo.Resource
+import com.android.example.github.vo.Point
 import com.github.mikephil.charting.data.LineDataSet
 import javax.inject.Inject
 
 @OpenForTesting
-class RepoViewModel @Inject constructor(repository: RepoRepository) : ViewModel() {
+class PointsViewModel @Inject constructor(repository: PointsRepository) : ViewModel() {
     lateinit var dataSet: LineDataSet
-    var listResource: List<Repo>? = null
+    var listResource: List<Point>? = null
     private val _repoId: MutableLiveData<String> = MutableLiveData()
     val repoId: LiveData<String>
         get() = _repoId
 
-    val points: LiveData<List<Repo>> =_repoId.switchMap { input ->
-        repository.loadRepos(input)
+    val points: LiveData<List<Point>> =_repoId.switchMap { input ->
+        repository.loadPoints(input)
     }
 
     fun setId(owner: String) {

@@ -16,7 +16,7 @@
 
 package com.android.example.github.di
 
-import com.android.example.github.ui.repo.RepoFragment
+import com.android.example.github.ui.point.PointsFragment
 import com.android.example.github.ui.search.SearchFragment
 
 import dagger.Module
@@ -26,7 +26,7 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class FragmentBuildersModule {
     @ContributesAndroidInjector
-    abstract fun contributeRepoFragment(): RepoFragment
+    abstract fun contributeRepoFragment(): PointsFragment
 
     @ContributesAndroidInjector
     abstract fun contributeSearchFragment(): SearchFragment

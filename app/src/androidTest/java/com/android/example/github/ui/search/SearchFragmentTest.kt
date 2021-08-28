@@ -46,7 +46,7 @@ import com.android.example.github.util.TestUtil
 import com.android.example.github.util.ViewModelUtil
 import com.android.example.github.util.disableProgressBarAnimations
 import com.android.example.github.util.mock
-import com.android.example.github.vo.Repo
+import com.android.example.github.vo.Point
 import com.android.example.github.vo.Resource
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
@@ -74,7 +74,7 @@ class SearchFragmentTest {
     private lateinit var mockBindingAdapter: FragmentBindingAdapters
     private lateinit var viewModel: SearchViewModel
     private val navController = mock<NavController>()
-    private val results = MutableLiveData<Resource<List<Repo>>>()
+    private val results = MutableLiveData<Resource<List<Point>>>()
     private val loadMoreStatus = MutableLiveData<SearchViewModel.LoadMoreState>()
 
     @Before

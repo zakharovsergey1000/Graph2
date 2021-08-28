@@ -24,24 +24,24 @@ import android.view.ViewGroup
 import com.android.example.github.AppExecutors
 import com.android.example.github.R
 import com.android.example.github.databinding.RepoItemBinding
-import com.android.example.github.vo.Repo
+import com.android.example.github.vo.Point
 
 /**
- * A RecyclerView adapter for [Repo] class.
+ * A RecyclerView adapter for [Point] class.
  */
 class RepoListAdapter(
     private val dataBindingComponent: DataBindingComponent,
     appExecutors: AppExecutors,
     private val showFullName: Boolean,
-    private val repoClickCallback: ((Repo) -> Unit)?
-) : DataBoundListAdapter<Repo, RepoItemBinding>(
+    private val repoClickCallback: ((Point) -> Unit)?
+) : DataBoundListAdapter<Point, RepoItemBinding>(
     appExecutors = appExecutors,
-    diffCallback = object : DiffUtil.ItemCallback<Repo>() {
-        override fun areItemsTheSame(oldItem: Repo, newItem: Repo): Boolean {
+    diffCallback = object : DiffUtil.ItemCallback<Point>() {
+        override fun areItemsTheSame(oldItem: Point, newItem: Point): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: Repo, newItem: Repo): Boolean {
+        override fun areContentsTheSame(oldItem: Point, newItem: Point): Boolean {
             return oldItem.x == newItem.x
                     && oldItem.y == newItem.y
         }
@@ -65,7 +65,7 @@ class RepoListAdapter(
         return binding
     }
 
-    override fun bind(binding: RepoItemBinding, item: Repo) {
+    override fun bind(binding: RepoItemBinding, item: Point) {
         binding.repo = item
     }
 }

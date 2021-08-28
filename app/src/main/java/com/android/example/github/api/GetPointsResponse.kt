@@ -16,20 +16,20 @@
 
 package com.android.example.github.api
 
-import androidx.lifecycle.LiveData
-import com.android.example.github.vo.Repo
-import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+
+import com.android.example.github.vo.Point
+import com.google.gson.annotations.SerializedName
 
 /**
- * REST API access points
+ * Simple object to hold repo search responses. This is different from the Entity in the database
+ * because we are keeping a search result in 1 row and denormalizing list of results into a single
+ * column.
  */
-interface GithubService {
-    @GET("api/test/points")
-    fun searchRepos(@Query("count") query: String): LiveData<ApiResponse<RepoSearchResponse>>
-
-    @GET("api/test/points")
-    fun searchRepos(@Query("count") query: String, @Query("page") page: Int): Call<RepoSearchResponse>
+data class GetPointsResponse(
+    @SerializedName("total_count")
+    val total: Int = 0,
+    @SerializedName("points")
+    var items: List<Point>
+) {
+    var nextPage: Int? = null
 }

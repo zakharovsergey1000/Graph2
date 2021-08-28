@@ -18,10 +18,10 @@ package com.android.example.github.di
 
 import android.app.Application
 import androidx.room.Room
-import com.android.example.github.api.GithubService
+import com.android.example.github.api.PointsService
 import com.android.example.github.api.UnsafeOkHttpClient
-import com.android.example.github.db.GithubDb
-import com.android.example.github.db.RepoDao
+import com.android.example.github.db.PointsDb
+import com.android.example.github.db.PointDao
 import com.android.example.github.util.LiveDataCallAdapterFactory
 import dagger.Module
 import dagger.Provides
@@ -34,7 +34,7 @@ import javax.inject.Singleton
 class AppModule {
     @Singleton
     @Provides
-    fun provideGithubService(): GithubService {
+    fun provideGithubService(): PointsService {
         val okHttpClient = UnsafeOkHttpClient.getUnsafeOkHttpClient().newBuilder()
             .readTimeout(60, TimeUnit.SECONDS)
             .cache(null)
@@ -46,21 +46,21 @@ class AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .build()
-            .create(GithubService::class.java)
+            .create(PointsService::class.java)
     }
 
     @Singleton
     @Provides
-    fun provideDb(app: Application): GithubDb {
+    fun provideDb(app: Application): PointsDb {
         return Room
-            .databaseBuilder(app, GithubDb::class.java, "github.db")
+            .databaseBuilder(app, PointsDb::class.java, "github.db")
             .fallbackToDestructiveMigration()
             .build()
     }
 
     @Singleton
     @Provides
-    fun provideRepoDao(db: GithubDb): RepoDao {
+    fun provideRepoDao(db: PointsDb): PointDao {
         return db.repoDao()
     }
 }

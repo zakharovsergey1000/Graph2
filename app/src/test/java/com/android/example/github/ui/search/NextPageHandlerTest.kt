@@ -18,7 +18,7 @@ package com.android.example.github.ui.search
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import com.android.example.github.repository.RepoRepository
+import com.android.example.github.repository.PointsRepository
 import com.android.example.github.vo.Resource
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.notNullValue
@@ -39,7 +39,7 @@ class NextPageHandlerTest {
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    private val repository = mock(RepoRepository::class.java)
+    private val repository = mock(PointsRepository::class.java)
 
     private lateinit var pageHandler: SearchViewModel.NextPageHandler
 

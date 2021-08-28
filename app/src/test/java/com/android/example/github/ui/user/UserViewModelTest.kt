@@ -19,11 +19,11 @@ package com.android.example.github.ui.user
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.android.example.github.repository.RepoRepository
+import com.android.example.github.repository.PointsRepository
 import com.android.example.github.repository.UserRepository
 import com.android.example.github.util.TestUtil
 import com.android.example.github.util.mock
-import com.android.example.github.vo.Repo
+import com.android.example.github.vo.Point
 import com.android.example.github.vo.Resource
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -47,7 +47,7 @@ class UserViewModelTest {
     val instantExecutorRule = InstantTaskExecutorRule()
 
     private val userRepository = mock(UserRepository::class.java)
-    private val repoRepository = mock(RepoRepository::class.java)
+    private val repoRepository = mock(PointsRepository::class.java)
     private val userViewModel = UserViewModel(userRepository, repoRepository)
 
     @Test
@@ -96,10 +96,10 @@ class UserViewModelTest {
         userViewModel.repositories.observeForever(mock())
         verifyNoMoreInteractions(repoRepository)
         userViewModel.setLogin("foo")
-        verify(repoRepository).loadRepos("foo")
+        verify(repoRepository).loadPoints("foo")
         reset(repoRepository)
         userViewModel.setLogin("bar")
-        verify(repoRepository).loadRepos("bar")
+        verify(repoRepository).loadPoints("bar")
         verifyNoMoreInteractions(userRepository)
     }
 
@@ -111,16 +111,16 @@ class UserViewModelTest {
         verifyNoMoreInteractions(repoRepository, userRepository)
         val userObserver = mock<Observer<Resource<User>>>()
         userViewModel.user.observeForever(userObserver)
-        val repoObserver = mock<Observer<Resource<List<Repo>>>>()
+        val repoObserver = mock<Observer<Resource<List<Point>>>>()
         userViewModel.repositories.observeForever(repoObserver)
 
         verify(userRepository).loadUser("foo")
-        verify(repoRepository).loadRepos("foo")
+        verify(repoRepository).loadPoints("foo")
         reset(userRepository, repoRepository)
 
         userViewModel.retry()
         verify(userRepository).loadUser("foo")
-        verify(repoRepository).loadRepos("foo")
+        verify(repoRepository).loadPoints("foo")
         reset(userRepository, repoRepository)
         userViewModel.user.removeObserver(userObserver)
         userViewModel.repositories.removeObserver(repoObserver)
@@ -140,7 +140,7 @@ class UserViewModelTest {
 
     @Test
     fun nullRepoList() {
-        val observer = mock<Observer<Resource<List<Repo>>>>()
+        val observer = mock<Observer<Resource<List<Point>>>>()
         userViewModel.setLogin("foo")
         userViewModel.setLogin(null)
         userViewModel.repositories.observeForever(observer)

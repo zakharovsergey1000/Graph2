@@ -17,21 +17,16 @@
 package com.android.example.github.repository
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.switchMap
 import com.android.example.github.AppExecutors
-import com.android.example.github.api.ApiResponse
 import com.android.example.github.api.ApiSuccessResponse
-import com.android.example.github.api.GithubService
-import com.android.example.github.api.RepoSearchResponse
-import com.android.example.github.db.GithubDb
-import com.android.example.github.db.RepoDao
+import com.android.example.github.api.PointsService
+import com.android.example.github.api.GetPointsResponse
+import com.android.example.github.db.PointsDb
+import com.android.example.github.db.PointDao
 import com.android.example.github.testing.OpenForTesting
-import com.android.example.github.util.AbsentLiveData
-import com.android.example.github.util.RateLimiter
-import com.android.example.github.vo.Repo
-import com.android.example.github.vo.RepoSearchResult
+import com.android.example.github.vo.Point
+import com.android.example.github.vo.PointSearchResult
 import com.android.example.github.vo.Resource
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -44,69 +39,67 @@ import javax.inject.Singleton
  */
 @Singleton
 @OpenForTesting
-class RepoRepository @Inject constructor(
+class PointsRepository @Inject constructor(
     private val appExecutors: AppExecutors,
-    private val db: GithubDb,
-    private val repoDao: RepoDao,
-    private val githubService: GithubService
+    private val db: PointsDb,
+    private val pointDao: PointDao,
+    private val pointsService: PointsService
 ) {
 
-    private val repoListRateLimit = RateLimiter<String>(10, TimeUnit.MINUTES)
-
-    fun loadRepos(owner: String): LiveData<List<Repo>> {
-        return repoDao.loadRepositories(owner)
+    fun loadPoints(owner: String): LiveData<List<Point>> {
+        return pointDao.loadPoints(owner)
     }
 
     fun searchNextPage(query: String): LiveData<Resource<Boolean>> {
         val fetchNextSearchPageTask = FetchNextSearchPageTask(
             query = query,
-            githubService = githubService,
+            pointsService = pointsService,
             db = db
         )
         appExecutors.networkIO().execute(fetchNextSearchPageTask)
         return fetchNextSearchPageTask.liveData
     }
 
-    private fun addRepos(repos: List<Repo>): List<Repo> {
-        val count = repos.count()
-        val list = mutableListOf<Repo> ()
+    private fun addPoints(points: List<Point>): List<Point> {
+        val count = points.count()
+        val list = mutableListOf<Point> ()
         for (i in 0..count step 999) {
-            val ids = repoDao.insertRepos(repos.subList(i, Math.min(i + 999, count) ))
-            list.addAll(repoDao.getReposFromRowids(ids))
+            val ids = pointDao.insertPoints(points.subList(i, Math.min(i + 999, count) ))
+            list.addAll(pointDao.getPointsFromRowids(ids))
         }
         return list
     }
 
-    fun search(query: String): LiveData<Resource<List<Repo>>> {
-        return object : NetworkBoundResource<List<Repo>, RepoSearchResponse>(appExecutors) {
+    fun search(query: String): LiveData<Resource<List<Point>>> {
+        return object : NetworkBoundResource<List<Point>, GetPointsResponse>(appExecutors) {
 
-            override fun saveCallResult(item: RepoSearchResponse) {
+            override fun saveCallResult(item: GetPointsResponse) {
                 val count = item.items.count()
                 item.items.forEach { repo ->  repo.count = count}
                 db.runInTransaction {
-                    repoDao.deleteRepositories(count.toString())
-                    item.items = addRepos(item.items)
+                    pointDao.deletePoints(count.toString())
+                    item.items = addPoints(item.items)
                     val repoIds = item.items.map { it.id }
-                    val repoSearchResult = RepoSearchResult(
+                    val repoSearchResult = PointSearchResult(
                         query = query,
                         repoIds = repoIds,
                         totalCount = item.total,
                         next = item.nextPage
                     )
-                    repoDao.insert(repoSearchResult)
+                    pointDao.insert(repoSearchResult)
                 }
             }
 
-            override fun shouldFetch(data: List<Repo>?) = true
+            override fun shouldFetch(data: List<Point>?) = true
 
-            override fun loadFromDb(): LiveData<List<Repo>> {
-                return repoDao.loadRepositories(query)
+            override fun loadFromDb(): LiveData<List<Point>> {
+                return pointDao.loadPoints(query)
             }
 
-            override fun createCall() = githubService.searchRepos(query)
+            override fun createCall() = pointsService.getPoints(query)
 
-            override fun processResponse(response: ApiSuccessResponse<RepoSearchResponse>)
-                    : RepoSearchResponse {
+            override fun processResponse(response: ApiSuccessResponse<GetPointsResponse>)
+                    : GetPointsResponse {
                 val body = response.body
                 body.nextPage = response.nextPage
                 return body

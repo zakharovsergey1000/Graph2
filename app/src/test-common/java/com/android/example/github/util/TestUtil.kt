@@ -16,7 +16,7 @@
 
 package com.android.example.github.util
 
-import com.android.example.github.vo.Repo
+import com.android.example.github.vo.Point
 
 object TestUtil {
 
@@ -29,7 +29,7 @@ object TestUtil {
         blog = null
     )
 
-    fun createRepos(count: Int, owner: String, name: String, description: String): List<Repo> {
+    fun createRepos(count: Int, owner: String, name: String, description: String): List<Point> {
         return (0 until count).map {
             createRepo(
                 owner = owner + it,
@@ -40,27 +40,27 @@ object TestUtil {
     }
 
     fun createRepo(owner: String, name: String, description: String) = createRepo(
-        id = Repo.UNKNOWN_ID,
+        id = Point.UNKNOWN_ID,
         owner = owner,
         name = name,
         description = description
     )
 
-    fun createRepo(id: Int, owner: String, name: String, description: String) = Repo(
+    fun createRepo(id: Int, owner: String, name: String, description: String) = Point(
         id = id,
         name = name,
         fullName = "$owner/$name",
         description = description,
-        owner = Repo.Owner(owner, null),
+        owner = Point.Owner(owner, null),
         stars = 3
     )
 
-    fun createContributor(repo: Repo, login: String, contributions: Int) = Contributor(
+    fun createContributor(point: Point, login: String, contributions: Int) = Contributor(
         login = login,
         contributions = contributions,
         avatarUrl = null
     ).apply {
-        repoName = repo.name
-        repoOwner = repo.owner.login
+        repoName = point.name
+        repoOwner = point.owner.login
     }
 }

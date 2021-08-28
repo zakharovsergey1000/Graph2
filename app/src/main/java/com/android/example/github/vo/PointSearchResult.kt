@@ -16,20 +16,15 @@
 
 package com.android.example.github.vo
 
-import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.Index
-import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
+import androidx.room.TypeConverters
+import com.android.example.github.db.GithubTypeConverters
 
-/**
- * Using name/owner_login as primary key instead of id since name/owner_login is always available
- * vs id is not.
- */
-@Entity
-data class Repo(
-    @PrimaryKey(autoGenerate = true) val id: Int,
-    var count: Int,
-    val x: Float,
-    val y: Float
+@Entity(primaryKeys = ["query"])
+@TypeConverters(GithubTypeConverters::class)
+data class PointSearchResult(
+    val query: String,
+    val repoIds: List<Int>,
+    val totalCount: Int,
+    val next: Int?
 )

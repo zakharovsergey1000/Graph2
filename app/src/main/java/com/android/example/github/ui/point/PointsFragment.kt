@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.example.github.ui.repo
+package com.android.example.github.ui.point
 
 import android.content.Context
 import android.os.Bundle
@@ -49,12 +49,12 @@ import kotlin.collections.ArrayList
 /**
  * The UI Controller for displaying a Github Repo's information with its contributors.
  */
-class RepoFragment : Fragment(), Injectable {
+class PointsFragment : Fragment(), Injectable {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    val repoViewModel: RepoViewModel by viewModels {
+    val pointsViewModel: PointsViewModel by viewModels {
         viewModelFactory
     }
 
@@ -65,10 +65,10 @@ class RepoFragment : Fragment(), Injectable {
     var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
     var binding by autoCleared<RepoFragmentBinding>()
 
-    private val params by navArgs<RepoFragmentArgs>()
+    private val params by navArgs<PointsFragmentArgs>()
     var adapter by autoCleared<RepoListAdapter>()
 
-    private fun initPointList(viewModel: RepoViewModel) {
+    private fun initPointList(viewModel: PointsViewModel) {
         viewModel.points.observe(viewLifecycleOwner, Observer { listResource ->
             // we don't need any null checks here for the adapter since LiveData guarantees that
             // it won't call us if fragment is stopped or not started.
@@ -130,7 +130,7 @@ class RepoFragment : Fragment(), Injectable {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
-        repoViewModel.setId(params.points)
+        pointsViewModel.setId(params.points)
         binding.lifecycleOwner = viewLifecycleOwner
         val rvAdapter = RepoListAdapter(
             dataBindingComponent = dataBindingComponent,
@@ -144,7 +144,7 @@ class RepoFragment : Fragment(), Injectable {
         binding.repoList.adapter = rvAdapter
         adapter = rvAdapter
 
-        initPointList(repoViewModel)
+        initPointList(pointsViewModel)
     }
 
     override fun onCreateOptionsMenu(menu: Menu,  menuInflater:MenuInflater) {
@@ -166,16 +166,16 @@ class RepoFragment : Fragment(), Injectable {
                         putInt(getString(R.string.line_data_set_mode_key), LineDataSet.Mode.CUBIC_BEZIER.ordinal)
                         apply()
                     }
-                    repoViewModel.dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER)
-                    repoViewModel.dataSet.setCubicIntensity(0.2f)
+                    pointsViewModel.dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER)
+                    pointsViewModel.dataSet.setCubicIntensity(0.2f)
                 } else {
                     with (sharedPref.edit()) {
                         putInt(getString(R.string.line_data_set_mode_key), LineDataSet.Mode.LINEAR.ordinal)
                         apply()
                     }
-                    repoViewModel.dataSet.setMode(LineDataSet.Mode.LINEAR)
+                    pointsViewModel.dataSet.setMode(LineDataSet.Mode.LINEAR)
                 }
-                val lineData = LineData(repoViewModel.dataSet)
+                val lineData = LineData(pointsViewModel.dataSet)
                 binding.chart1.setData(lineData)
                 binding.chart1.invalidate() // refresh
                 true

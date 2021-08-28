@@ -23,13 +23,13 @@
 
         <import type="com.android.example.github.vo.Status" />
 
-        <import type="com.android.example.github.vo.Repo" />
+        <import type="com.android.example.github.vo.Point" />
 
         <import type="java.util.List" />
 
         <variable
             name="resource"
-            type="Resource&lt;List&lt;Repo>>" />
+            type="Resource&lt;List&lt;Point>>" />
 
         <variable
             name="callback"
