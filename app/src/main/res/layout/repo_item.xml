@@ -26,7 +26,7 @@
 
         <variable
             name="repo"
-            type="com.android.example.github.vo.Point" />
+            type="com.android.example.points.vo.Point" />
     </data>
 
     <androidx.cardview.widget.CardView
