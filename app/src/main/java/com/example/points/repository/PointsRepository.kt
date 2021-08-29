@@ -3,10 +3,10 @@ package com.example.points.repository
 import androidx.lifecycle.LiveData
 import com.example.points.AppExecutors
 import com.example.points.api.ApiSuccessResponse
-import com.example.points.api.PointsService
 import com.example.points.api.GetPointsResponse
-import com.example.points.db.PointsDb
+import com.example.points.api.PointsService
 import com.example.points.db.PointDao
+import com.example.points.db.PointsDb
 import com.example.points.testing.OpenForTesting
 import com.example.points.vo.Point
 import com.example.points.vo.PointSearchResult
