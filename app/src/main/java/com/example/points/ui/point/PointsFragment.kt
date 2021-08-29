@@ -16,13 +16,18 @@
 
 package com.example.points.ui.point
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.view.*
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -68,6 +73,12 @@ class PointsFragment : Fragment(), Injectable {
     private val params by navArgs<PointsFragmentArgs>()
     var adapter by autoCleared<RepoListAdapter>()
 
+    fun showRequestPermissionRationaleDialog() {
+        // Create an instance of the dialog fragment and show it
+        val dialog = RequestPermissionRationaleDialogFragment()
+        dialog.show(parentFragmentManager, "RequestPermissionRationaleDialogFragment")
+    }
+
     private fun initPointList(viewModel: PointsViewModel) {
         viewModel.points.observe(viewLifecycleOwner, Observer { listResource ->
             // we don't need any null checks here for the adapter since LiveData guarantees that
@@ -99,6 +110,21 @@ class PointsFragment : Fragment(), Injectable {
             val lineData = LineData(viewModel.dataSet)
             binding.chart1.setData(lineData)
             binding.chart1.invalidate() // refresh
+        })
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Use the Kotlin extension in the fragment-ktx artifact
+        setFragmentResultListener("requestKey", { requestKey: String, bundle: Bundle ->
+            // We use a String here, but any type that can be put in a Bundle is supported
+            val result = bundle.getInt("bundleKey")
+            // Do something with the result
+            when (result) {
+                R.string.ok -> {
+                    requestPermission()
+                }
+            }
         })
     }
 
@@ -156,7 +182,28 @@ class PointsFragment : Fragment(), Injectable {
         // Handle item selection
         return when (item.itemId) {
             R.id.save -> {
-                saveToPicture()
+                when {
+                    ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_GRANTED -> {
+                        // You can use the API that requires the permission.
+                        saveToPicture()
+                    }
+                    shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) -> {
+                        // In an educational UI, explain to the user why your app requires this
+                        // permission for a specific feature to behave as expected. In this UI,
+                        // include a "cancel" or "no thanks" button that allows the user to
+                        // continue using your app without granting the permission.
+                        showRequestPermissionRationaleDialog()
+
+                    }
+                    else -> {
+                        // You can directly ask for the permission.
+                        // The registered ActivityResultCallback gets the result of this request.
+                        requestPermission()
+                    }
+                }
                 true
             }
             R.id.toggle_basic_cubic -> {
@@ -182,6 +229,33 @@ class PointsFragment : Fragment(), Injectable {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun requestPermission() {
+        val requestPermissionLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.RequestPermission()
+            ) { isGranted: Boolean ->
+                if (isGranted) {
+                    // Permission is granted. Continue the action or workflow in your
+                    // app.
+                    saveToPicture()
+                } else {
+                    // Explain to the user that the feature is unavailable because the
+                    // features requires a permission that the user has denied. At the
+                    // same time, respect the user's decision. Don't link to system
+                    // settings in an effort to convince the user to change their
+                    // decision.
+                    Snackbar.make(
+                        binding.chart1,
+                        getString(R.string.permission_request_to_write_to_external_storage),
+                        3000
+                    ).show()
+                }
+            }
+        requestPermissionLauncher.launch(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
     }
 
     private fun initRecyclerView() {

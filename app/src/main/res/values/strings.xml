@@ -28,4 +28,7 @@
     <string name="save_to_picture">Save to picture</string>
     <string name="toggle_basic_cubic">Toggle basic or cubic</string>
     <string name="line_data_set_mode_key">LineDataSetMode</string>
+    <string name="permission_request_to_write_to_external_storage">To save the picture you should give this application the permission to write to external storage</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>
