@@ -20,13 +20,13 @@
 
     <data>
 
-        <import type="com.android.example.points.vo.Point" />
+        <import type="com.example.points.vo.Point" />
 
         <import type="java.util.List" />
 
-        <import type="com.android.example.points.vo.Status" />
+        <import type="com.example.points.vo.Status" />
 
-        <import type="com.android.example.points.vo.Resource" />
+        <import type="com.example.points.vo.Resource" />
         <import type="androidx.lifecycle.LiveData"/>
         <variable
             name="query"
@@ -42,7 +42,7 @@
 
         <variable
             name="callback"
-            type="com.android.example.points.ui.common.RetryCallback" />
+            type="com.example.points.ui.common.RetryCallback" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

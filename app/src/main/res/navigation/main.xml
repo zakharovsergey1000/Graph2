@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.android.example.points.ui.search.SearchFragment"
+        android:name="com.example.points.ui.search.SearchFragment"
         android:label="SearchFragment" >
         <action
             android:id="@+id/showRepo"
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/repoFragment"
-        android:name="com.android.example.points.ui.point.PointsFragment"
+        android:name="com.example.points.ui.point.PointsFragment"
         android:label="RepoFragment" >
         <argument
             android:name="points"
