@@ -52,7 +52,7 @@ repositories {
 }
 
 dependencies {
-    implementation deps.app_compat
+    implementation deps.appcompat
     implementation deps.recyclerview
     implementation deps.cardview
     implementation deps.material
@@ -93,7 +93,7 @@ dependencies {
     androidTestImplementation deps.atsl.runner
     androidTestImplementation deps.atsl.rules
 
-    androidTestImplementation deps.app_compat
+    androidTestImplementation deps.appcompat
     androidTestImplementation deps.recyclerview
     androidTestImplementation deps.cardview
     androidTestImplementation deps.material

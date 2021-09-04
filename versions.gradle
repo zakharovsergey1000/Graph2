@@ -82,7 +82,7 @@ deps.android_gradle_plugin = "com.android.tools.build:gradle:$versions.android_g
 
 deps.annotations = "androidx.annotation:annotation:$versions.annotations"
 
-deps.app_compat = "androidx.appcompat:appcompat:$versions.appcompat"
+deps.appcompat = "androidx.appcompat:appcompat:$versions.appcompat"
 
 def arch_core = [:]
 arch_core.runtime = "androidx.arch.core:core-runtime:$versions.arch_core"
