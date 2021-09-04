@@ -1,4 +1,4 @@
-package com.android.example.github.testing
+package com.example.points.testing
 
 @Target(AnnotationTarget.CLASS)
 annotation class OpenForTesting

@@ -7,18 +7,18 @@ plugins {
 }
 allOpen {
     // allows mocking for classes w/o directly opening them for release builds
-    annotation 'com.android.example.github.testing.OpenClass'
+    annotation 'com.example.points.testing.OpenClass'
 }
 android {
     compileSdkVersion build_versions.compile_sdk
     buildToolsVersion build_versions.build_tools
     defaultConfig {
-        applicationId "com.android.example.github"
+        applicationId "com.example.points"
         minSdkVersion build_versions.min_sdk
         targetSdkVersion build_versions.target_sdk
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "com.android.example.github.util.GithubTestRunner"
+        testInstrumentationRunner "com.example.points.util.GithubTestRunner"
     }
     buildTypes {
           debug {
