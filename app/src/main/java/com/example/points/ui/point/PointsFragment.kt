@@ -57,6 +57,28 @@ class PointsFragment : Fragment(), Injectable {
     private val params by navArgs<PointsFragmentArgs>()
     var adapter by autoCleared<RepoListAdapter>()
 
+    val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                // Permission is granted. Continue the action or workflow in your
+                // app.
+                saveToPicture()
+            } else {
+                // Explain to the user that the feature is unavailable because the
+                // features requires a permission that the user has denied. At the
+                // same time, respect the user's decision. Don't link to system
+                // settings in an effort to convince the user to change their
+                // decision.
+                Snackbar.make(
+                    binding.chart1,
+                    getString(R.string.permission_request_to_write_to_external_storage),
+                    3000
+                ).show()
+            }
+        }
+
     fun showRequestPermissionRationaleDialog() {
         // Create an instance of the dialog fragment and show it
         val dialog = RequestPermissionRationaleDialogFragment()
@@ -216,27 +238,6 @@ class PointsFragment : Fragment(), Injectable {
     }
 
     private fun requestPermission() {
-        val requestPermissionLauncher =
-            registerForActivityResult(
-                ActivityResultContracts.RequestPermission()
-            ) { isGranted: Boolean ->
-                if (isGranted) {
-                    // Permission is granted. Continue the action or workflow in your
-                    // app.
-                    saveToPicture()
-                } else {
-                    // Explain to the user that the feature is unavailable because the
-                    // features requires a permission that the user has denied. At the
-                    // same time, respect the user's decision. Don't link to system
-                    // settings in an effort to convince the user to change their
-                    // decision.
-                    Snackbar.make(
-                        binding.chart1,
-                        getString(R.string.permission_request_to_write_to_external_storage),
-                        3000
-                    ).show()
-                }
-            }
         requestPermissionLauncher.launch(
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
