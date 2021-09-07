@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 
 import com.example.points.ui.point.PointsViewModel
 import com.example.points.ui.search.SearchViewModel
-import com.example.points.viewmodel.GithubViewModelFactory
+import com.example.points.viewmodel.PointsViewModelFactory
 
 import dagger.Binds
 import dagger.Module
@@ -25,5 +25,5 @@ abstract class ViewModelModule {
     abstract fun bindRepoViewModel(pointsViewModel: PointsViewModel): ViewModel
 
     @Binds
-    abstract fun bindViewModelFactory(factory: GithubViewModelFactory): ViewModelProvider.Factory
+    abstract fun bindViewModelFactory(factory: PointsViewModelFactory): ViewModelProvider.Factory
 }
