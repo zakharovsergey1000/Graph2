@@ -29,7 +29,6 @@ import com.example.points.util.ApiUtil.successCall
 import com.example.points.util.InstantAppExecutors
 import com.example.points.util.TestUtil
 import com.example.points.util.argumentCaptor
-import com.example.points.util.mock
 import com.example.points.vo.Point
 import com.example.points.vo.PointSearchResult
 import com.example.points.vo.Resource
@@ -63,7 +62,7 @@ class PointRepositoryTest {
     @Before
     fun init() {
         val db = mock(PointsDb::class.java)
-        `when`(db.repoDao()).thenReturn(dao)
+        `when`(db.pointDao()).thenReturn(dao)
         `when`(db.runInTransaction(ArgumentMatchers.any())).thenCallRealMethod()
         repository = PointsRepository(InstantAppExecutors(), db, dao, service)
     }

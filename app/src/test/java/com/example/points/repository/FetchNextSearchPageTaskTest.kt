@@ -23,7 +23,6 @@ import com.example.points.api.GetPointsResponse
 import com.example.points.db.PointsDb
 import com.example.points.db.PointDao
 import com.example.points.util.TestUtil
-import com.example.points.util.mock
 import com.example.points.vo.PointSearchResult
 import com.example.points.vo.Resource
 import okhttp3.Headers
@@ -66,7 +65,7 @@ class FetchNextSearchPageTaskTest {
         db = mock(PointsDb::class.java)
         `when`(db.runInTransaction(any())).thenCallRealMethod()
         pointDao = mock(PointDao::class.java)
-        `when`(db.repoDao()).thenReturn(pointDao)
+        `when`(db.pointDao()).thenReturn(pointDao)
         task = FetchNextSearchPageTask("foo", service, db)
         task.liveData.observeForever(observer)
     }

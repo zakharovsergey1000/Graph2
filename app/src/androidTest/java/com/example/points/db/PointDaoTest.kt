@@ -36,8 +36,8 @@ class PointDaoTest : DbTest() {
     @Test
     fun insertAndRead() {
         val repo = TestUtil.createRepo("foo", "bar", "desc")
-        db.repoDao().insert(repo)
-        val loaded = db.repoDao().load("foo", "bar").getOrAwaitValue()
+        db.pointDao().insert(repo)
+        val loaded = db.pointDao().load("foo", "bar").getOrAwaitValue()
         assertThat(loaded, notNullValue())
         assertThat(loaded.name, `is`("bar"))
         assertThat(loaded.description, `is`("desc"))
@@ -50,7 +50,7 @@ class PointDaoTest : DbTest() {
         val repo = TestUtil.createRepo("foo", "bar", "desc")
         val contributor = TestUtil.createContributor(repo, "c1", 3)
         try {
-            db.repoDao().insertContributors(listOf(contributor))
+            db.pointDao().insertContributors(listOf(contributor))
             throw AssertionError("must fail because repo does not exist")
         } catch (ex: SQLiteException) {
         }
@@ -63,10 +63,10 @@ class PointDaoTest : DbTest() {
         val c1 = TestUtil.createContributor(repo, "c1", 3)
         val c2 = TestUtil.createContributor(repo, "c2", 7)
         db.runInTransaction {
-            db.repoDao().insert(repo)
-            db.repoDao().insertContributors(arrayListOf(c1, c2))
+            db.pointDao().insert(repo)
+            db.pointDao().insertContributors(arrayListOf(c1, c2))
         }
-        val list = db.repoDao().loadContributors("foo", "bar").getOrAwaitValue()
+        val list = db.pointDao().loadContributors("foo", "bar").getOrAwaitValue()
         assertThat(list.size, `is`(2))
         val first = list[0]
 
@@ -81,28 +81,28 @@ class PointDaoTest : DbTest() {
     @Test
     fun createIfNotExists_exists() {
         val repo = TestUtil.createRepo("foo", "bar", "desc")
-        db.repoDao().insert(repo)
-        assertThat(db.repoDao().createRepoIfNotExists(repo), `is`(-1L))
+        db.pointDao().insert(repo)
+        assertThat(db.pointDao().createRepoIfNotExists(repo), `is`(-1L))
     }
 
     @Test
     fun createIfNotExists_doesNotExist() {
         val repo = TestUtil.createRepo("foo", "bar", "desc")
-        assertThat(db.repoDao().createRepoIfNotExists(repo), `is`(1L))
+        assertThat(db.pointDao().createRepoIfNotExists(repo), `is`(1L))
     }
 
     @Test
     fun insertContributorsThenUpdateRepo() {
         val repo = TestUtil.createRepo("foo", "bar", "desc")
-        db.repoDao().insert(repo)
+        db.pointDao().insert(repo)
         val contributor = TestUtil.createContributor(repo, "aa", 3)
-        db.repoDao().insertContributors(listOf(contributor))
-        var data = db.repoDao().loadContributors("foo", "bar")
+        db.pointDao().insertContributors(listOf(contributor))
+        var data = db.pointDao().loadContributors("foo", "bar")
         assertThat(data.getOrAwaitValue().size, `is`(1))
 
         val update = TestUtil.createRepo("foo", "bar", "desc")
-        db.repoDao().insert(update)
-        data = db.repoDao().loadContributors("foo", "bar")
+        db.pointDao().insert(update)
+        data = db.pointDao().loadContributors("foo", "bar")
         assertThat(data.getOrAwaitValue().size, `is`(1))
     }
 }

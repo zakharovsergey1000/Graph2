@@ -17,5 +17,5 @@ import com.example.points.vo.PointSearchResult
     exportSchema = false
 )
 abstract class PointsDb : RoomDatabase() {
-    abstract fun repoDao(): PointDao
+    abstract fun pointDao(): PointDao
 }
