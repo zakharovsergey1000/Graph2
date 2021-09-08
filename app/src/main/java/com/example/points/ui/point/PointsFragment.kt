@@ -173,7 +173,7 @@ class PointsFragment : Fragment(), Injectable {
                 SearchFragmentDirections.showRepo(repo.count.toString())
             )
         }
-        binding.repoList.adapter = rvAdapter
+        binding.pointList.adapter = rvAdapter
         adapter = rvAdapter
 
         initPointList(pointsViewModel)
