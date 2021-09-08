@@ -44,7 +44,7 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideRepoDao(db: PointsDb): PointDao {
+    fun providePointDao(db: PointsDb): PointDao {
         return db.pointDao()
     }
 }
