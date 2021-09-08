@@ -53,13 +53,13 @@ class PointsRepository @Inject constructor(
                     pointDao.deletePoints(count.toString())
                     item.items = addPoints(item.items)
                     val pointIds = item.items.map { it.id }
-                    val repoSearchResult = PointSearchResult(
+                    val pointSearchResult = PointSearchResult(
                         query = query,
                         pointIds = pointIds,
                         totalCount = item.total,
                         next = item.nextPage
                     )
-                    pointDao.insert(repoSearchResult)
+                    pointDao.insert(pointSearchResult)
                 }
             }
 
