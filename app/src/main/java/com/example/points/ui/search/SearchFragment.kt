@@ -64,7 +64,7 @@ class SearchFragment : Fragment(), Injectable {
         searchViewModel.resultsOnce.observe(viewLifecycleOwner, Observer { result ->
             if (result?.status == Status.SUCCESS) {
                 findNavController().navigate(
-                    SearchFragmentDirections.showRepo(result.data!!.get(0).count.toString())
+                    SearchFragmentDirections.showPoint(result.data!!.get(0).count.toString())
                 )
             }
         })

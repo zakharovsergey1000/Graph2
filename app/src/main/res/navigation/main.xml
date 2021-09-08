@@ -23,7 +23,7 @@
         android:name="com.example.points.ui.search.SearchFragment"
         android:label="SearchFragment" >
         <action
-            android:id="@+id/showRepo"
+            android:id="@+id/showPoint"
             app:destination="@id/pointsFragment" />
     </fragment>
     <fragment

@@ -170,7 +170,7 @@ class PointsFragment : Fragment(), Injectable {
             showFullName = true
         ) { point ->
             findNavController().navigate(
-                SearchFragmentDirections.showRepo(point.count.toString())
+                SearchFragmentDirections.showPoint(point.count.toString())
             )
         }
         binding.pointList.adapter = rvAdapter
