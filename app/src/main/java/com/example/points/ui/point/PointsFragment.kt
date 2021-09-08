@@ -21,7 +21,7 @@ import androidx.transition.TransitionInflater
 import com.example.points.AppExecutors
 import com.example.points.R
 import com.example.points.binding.FragmentDataBindingComponent
-import com.example.points.databinding.RepoFragmentBinding
+import com.example.points.databinding.PointsFragmentBinding
 import com.example.points.di.Injectable
 import com.example.points.ui.common.RepoListAdapter
 import com.example.points.ui.search.SearchFragmentDirections
@@ -52,7 +52,7 @@ class PointsFragment : Fragment(), Injectable {
 
     // mutable for testing
     var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
-    var binding by autoCleared<RepoFragmentBinding>()
+    var binding by autoCleared<PointsFragmentBinding>()
 
     private val params by navArgs<PointsFragmentArgs>()
     var adapter by autoCleared<RepoListAdapter>()
@@ -138,9 +138,9 @@ class PointsFragment : Fragment(), Injectable {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val dataBinding = DataBindingUtil.inflate<RepoFragmentBinding>(
+        val dataBinding = DataBindingUtil.inflate<PointsFragmentBinding>(
             inflater,
-            R.layout.repo_fragment,
+            R.layout.points_fragment,
             container,
             false
         )
