@@ -24,10 +24,10 @@
         android:label="SearchFragment" >
         <action
             android:id="@+id/showRepo"
-            app:destination="@id/repoFragment" />
+            app:destination="@id/pointsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/repoFragment"
+        android:id="@+id/pointsFragment"
         android:name="com.example.points.ui.point.PointsFragment"
         android:label="RepoFragment" >
         <argument
