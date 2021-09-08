@@ -53,8 +53,8 @@ abstract class PointDao {
         pointIds.withIndex().forEach {
             order.put(it.value, it.index)
         }
-        return loadById(pointIds).map { repositories ->
-            repositories.sortedWith(compareBy { order.get(it.id) })
+        return loadById(pointIds).map { points ->
+            points.sortedWith(compareBy { order.get(it.id) })
         }
     }
 
