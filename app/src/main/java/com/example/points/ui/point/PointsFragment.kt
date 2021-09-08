@@ -168,9 +168,9 @@ class PointsFragment : Fragment(), Injectable {
             dataBindingComponent = dataBindingComponent,
             appExecutors = appExecutors,
             showFullName = true
-        ) { repo ->
+        ) { point ->
             findNavController().navigate(
-                SearchFragmentDirections.showRepo(repo.count.toString())
+                SearchFragmentDirections.showRepo(point.count.toString())
             )
         }
         binding.pointList.adapter = rvAdapter

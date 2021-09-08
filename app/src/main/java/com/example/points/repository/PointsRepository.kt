@@ -48,7 +48,7 @@ class PointsRepository @Inject constructor(
 
             override fun saveCallResult(item: GetPointsResponse) {
                 val count = item.items.count()
-                item.items.forEach { repo ->  repo.count = count}
+                item.items.forEach { point ->  point.count = count}
                 db.runInTransaction {
                     pointDao.deletePoints(count.toString())
                     item.items = addPoints(item.items)

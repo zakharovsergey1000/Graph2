@@ -42,7 +42,7 @@ class RepoListAdapter(
         )
         binding.showFullName = showFullName
         binding.root.setOnClickListener {
-            binding.repo?.let {
+            binding.point?.let {
                 repoClickCallback?.invoke(it)
             }
         }
@@ -50,6 +50,6 @@ class RepoListAdapter(
     }
 
     override fun bind(binding: PointItemBinding, item: Point) {
-        binding.repo = item
+        binding.point = item
     }
 }
