@@ -22,7 +22,7 @@ abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(PointsViewModel::class)
-    abstract fun bindRepoViewModel(pointsViewModel: PointsViewModel): ViewModel
+    abstract fun bindPointsViewModel(pointsViewModel: PointsViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: PointsViewModelFactory): ViewModelProvider.Factory
