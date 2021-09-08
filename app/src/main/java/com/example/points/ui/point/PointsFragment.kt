@@ -23,7 +23,7 @@ import com.example.points.R
 import com.example.points.binding.FragmentDataBindingComponent
 import com.example.points.databinding.PointsFragmentBinding
 import com.example.points.di.Injectable
-import com.example.points.ui.common.RepoListAdapter
+import com.example.points.ui.common.PointListAdapter
 import com.example.points.ui.search.SearchFragmentDirections
 import com.example.points.util.autoCleared
 import com.github.mikephil.charting.data.Entry
@@ -55,7 +55,7 @@ class PointsFragment : Fragment(), Injectable {
     var binding by autoCleared<PointsFragmentBinding>()
 
     private val params by navArgs<PointsFragmentArgs>()
-    var adapter by autoCleared<RepoListAdapter>()
+    var adapter by autoCleared<PointListAdapter>()
 
     val requestPermissionLauncher =
         registerForActivityResult(
@@ -164,7 +164,7 @@ class PointsFragment : Fragment(), Injectable {
         setHasOptionsMenu(true)
         pointsViewModel.setId(params.points)
         binding.lifecycleOwner = viewLifecycleOwner
-        val rvAdapter = RepoListAdapter(
+        val rvAdapter = PointListAdapter(
             dataBindingComponent = dataBindingComponent,
             appExecutors = appExecutors,
             showFullName = true

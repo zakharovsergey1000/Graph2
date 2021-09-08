@@ -13,7 +13,7 @@ import com.example.points.vo.Point
 /**
  * A RecyclerView adapter for [Point] class.
  */
-class RepoListAdapter(
+class PointListAdapter(
     private val dataBindingComponent: DataBindingComponent,
     appExecutors: AppExecutors,
     private val showFullName: Boolean,
