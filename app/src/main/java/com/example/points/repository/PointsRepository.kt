@@ -52,10 +52,10 @@ class PointsRepository @Inject constructor(
                 db.runInTransaction {
                     pointDao.deletePoints(count.toString())
                     item.items = addPoints(item.items)
-                    val repoIds = item.items.map { it.id }
+                    val pointIds = item.items.map { it.id }
                     val repoSearchResult = PointSearchResult(
                         query = query,
-                        repoIds = repoIds,
+                        pointIds = pointIds,
                         totalCount = item.total,
                         next = item.nextPage
                     )

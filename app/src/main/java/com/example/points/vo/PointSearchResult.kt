@@ -8,7 +8,7 @@ import com.example.points.db.GithubTypeConverters
 @TypeConverters(GithubTypeConverters::class)
 data class PointSearchResult(
     val query: String,
-    val repoIds: List<Int>,
+    val pointIds: List<Int>,
     val totalCount: Int,
     val next: Int?
 )

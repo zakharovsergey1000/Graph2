@@ -48,18 +48,18 @@ abstract class PointDao {
     @Query("SELECT * FROM PointSearchResult WHERE `query` = :query")
     abstract fun search(query: String): LiveData<PointSearchResult?>
 
-    fun loadOrdered(repoIds: List<Int>): LiveData<List<Point>> {
+    fun loadOrdered(pointIds: List<Int>): LiveData<List<Point>> {
         val order = SparseIntArray()
-        repoIds.withIndex().forEach {
+        pointIds.withIndex().forEach {
             order.put(it.value, it.index)
         }
-        return loadById(repoIds).map { repositories ->
+        return loadById(pointIds).map { repositories ->
             repositories.sortedWith(compareBy { order.get(it.id) })
         }
     }
 
-    @Query("SELECT * FROM Point WHERE id in (:repoIds)")
-    protected abstract fun loadById(repoIds: List<Int>): LiveData<List<Point>>
+    @Query("SELECT * FROM Point WHERE id in (:pointIds)")
+    protected abstract fun loadById(pointIds: List<Int>): LiveData<List<Point>>
 
     @Query("SELECT * FROM PointSearchResult WHERE `query` = :query")
     abstract fun findSearchResult(query: String): PointSearchResult?
