@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.points.AppExecutors
 import com.example.points.R
-import com.example.points.databinding.RepoItemBinding
+import com.example.points.databinding.PointItemBinding
 import com.example.points.vo.Point
 
 /**
@@ -18,7 +18,7 @@ class RepoListAdapter(
     appExecutors: AppExecutors,
     private val showFullName: Boolean,
     private val repoClickCallback: ((Point) -> Unit)?
-) : DataBoundListAdapter<Point, RepoItemBinding>(
+) : DataBoundListAdapter<Point, PointItemBinding>(
     appExecutors = appExecutors,
     diffCallback = object : DiffUtil.ItemCallback<Point>() {
         override fun areItemsTheSame(oldItem: Point, newItem: Point): Boolean {
@@ -32,10 +32,10 @@ class RepoListAdapter(
     }
 ) {
 
-    override fun createBinding(parent: ViewGroup): RepoItemBinding {
-        val binding = DataBindingUtil.inflate<RepoItemBinding>(
+    override fun createBinding(parent: ViewGroup): PointItemBinding {
+        val binding = DataBindingUtil.inflate<PointItemBinding>(
             LayoutInflater.from(parent.context),
-            R.layout.repo_item,
+            R.layout.point_item,
             parent,
             false,
             dataBindingComponent
@@ -49,7 +49,7 @@ class RepoListAdapter(
         return binding
     }
 
-    override fun bind(binding: RepoItemBinding, item: Point) {
+    override fun bind(binding: PointItemBinding, item: Point) {
         binding.repo = item
     }
 }
