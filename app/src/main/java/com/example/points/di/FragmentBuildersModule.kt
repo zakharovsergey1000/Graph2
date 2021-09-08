@@ -10,7 +10,7 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class FragmentBuildersModule {
     @ContributesAndroidInjector
-    abstract fun contributeRepoFragment(): PointsFragment
+    abstract fun contributePointsFragment(): PointsFragment
 
     @ContributesAndroidInjector
     abstract fun contributeSearchFragment(): SearchFragment
