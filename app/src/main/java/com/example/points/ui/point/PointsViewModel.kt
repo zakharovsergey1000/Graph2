@@ -15,17 +15,17 @@ import javax.inject.Inject
 class PointsViewModel @Inject constructor(repository: PointsRepository) : ViewModel() {
     lateinit var dataSet: LineDataSet
     var listResource: List<Point>? = null
-    private val _repoId: MutableLiveData<String> = MutableLiveData()
-    val repoId: LiveData<String>
-        get() = _repoId
+    private val _pointId: MutableLiveData<String> = MutableLiveData()
+    val pointId: LiveData<String>
+        get() = _pointId
 
-    val points: LiveData<List<Point>> =_repoId.switchMap { input ->
+    val points: LiveData<List<Point>> =_pointId.switchMap { input ->
         repository.loadPoints(input)
     }
 
     fun setId(owner: String) {
-        if (_repoId.value != owner) {
-            _repoId.value = owner
+        if (_pointId.value != owner) {
+            _pointId.value = owner
         }
     }
 
