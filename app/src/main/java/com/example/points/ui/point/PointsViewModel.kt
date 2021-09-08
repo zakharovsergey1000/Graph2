@@ -29,7 +29,7 @@ class PointsViewModel @Inject constructor(repository: PointsRepository) : ViewMo
         }
     }
 
-    data class RepoId(val owner: String, val name: String) {
+    data class PointId(val owner: String, val name: String) {
         fun <T> ifExists(f: (String, String) -> LiveData<T>): LiveData<T> {
             return if (owner.isBlank() || name.isBlank()) {
                 AbsentLiveData.create()
