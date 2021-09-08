@@ -34,7 +34,7 @@
             android:name="points"
             app:argType="string" />
         <action
-            android:id="@+id/action_repoFragment_to_searchFragment"
+            android:id="@+id/action_pointsFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
     </fragment>
 </navigation>
