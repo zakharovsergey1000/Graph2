@@ -17,7 +17,7 @@ class RepoListAdapter(
     private val dataBindingComponent: DataBindingComponent,
     appExecutors: AppExecutors,
     private val showFullName: Boolean,
-    private val repoClickCallback: ((Point) -> Unit)?
+    private val pointClickCallback: ((Point) -> Unit)?
 ) : DataBoundListAdapter<Point, PointItemBinding>(
     appExecutors = appExecutors,
     diffCallback = object : DiffUtil.ItemCallback<Point>() {
@@ -43,7 +43,7 @@ class RepoListAdapter(
         binding.showFullName = showFullName
         binding.root.setOnClickListener {
             binding.point?.let {
-                repoClickCallback?.invoke(it)
+                pointClickCallback?.invoke(it)
             }
         }
         return binding
