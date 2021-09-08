@@ -29,7 +29,7 @@
     <fragment
         android:id="@+id/pointsFragment"
         android:name="com.example.points.ui.point.PointsFragment"
-        android:label="RepoFragment" >
+        android:label="PointsFragment">
         <argument
             android:name="points"
             app:argType="string" />
