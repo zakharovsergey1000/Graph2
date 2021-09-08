@@ -53,7 +53,6 @@ repositories {
 
 dependencies {
     implementation deps.appcompat
-    implementation deps.recyclerview
     implementation deps.material
     implementation deps.core_ktx
     implementation deps.transition
