@@ -42,12 +42,6 @@ class SearchViewModel @Inject constructor(pointsRepository: PointsRepository) : 
         _query.value = input
     }
 
-    fun refresh() {
-        _query.value?.let {
-            _query.value = it
-        }
-    }
-
     class LoadMoreState(val isRunning: Boolean, val errorMessage: String?) {
         private var handledError = false
 
