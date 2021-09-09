@@ -37,7 +37,7 @@ class AppModule {
     @Provides
     fun provideDb(app: Application): PointsDb {
         return Room
-            .databaseBuilder(app, PointsDb::class.java, "github.db")
+            .databaseBuilder(app, PointsDb::class.java, "points.db")
             .fallbackToDestructiveMigration()
             .build()
     }
