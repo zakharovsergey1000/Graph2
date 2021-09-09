@@ -167,12 +167,9 @@ class PointsFragment : Fragment(), Injectable {
         val rvAdapter = PointListAdapter(
             dataBindingComponent = dataBindingComponent,
             appExecutors = appExecutors,
-            showFullName = true
-        ) { point ->
-            findNavController().navigate(
-                SearchFragmentDirections.showPoint(point.count.toString())
-            )
-        }
+            showFullName = true,
+            null
+        )
         binding.pointList.adapter = rvAdapter
         adapter = rvAdapter
 
