@@ -32,8 +32,6 @@ class SearchViewModel @Inject constructor(pointsRepository: PointsRepository) : 
     }
 
     val resultsOnce = results.toSingleEvent()
-    val loadMoreStatus: LiveData<LoadMoreState>
-        get() = nextPageHandler.loadMoreState
 
     fun setQuery(originalInput: String) {
         val input = originalInput.toLowerCase(Locale.getDefault()).trim()
