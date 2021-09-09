@@ -44,23 +44,4 @@ abstract class PointDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(result: PointSearchResult)
-
-    @Query("SELECT * FROM PointSearchResult WHERE `query` = :query")
-    abstract fun search(query: String): LiveData<PointSearchResult?>
-
-    fun loadOrdered(pointIds: List<Int>): LiveData<List<Point>> {
-        val order = SparseIntArray()
-        pointIds.withIndex().forEach {
-            order.put(it.value, it.index)
-        }
-        return loadById(pointIds).map { points ->
-            points.sortedWith(compareBy { order.get(it.id) })
-        }
-    }
-
-    @Query("SELECT * FROM Point WHERE id in (:pointIds)")
-    protected abstract fun loadById(pointIds: List<Int>): LiveData<List<Point>>
-
-    @Query("SELECT * FROM PointSearchResult WHERE `query` = :query")
-    abstract fun findSearchResult(query: String): PointSearchResult?
 }
