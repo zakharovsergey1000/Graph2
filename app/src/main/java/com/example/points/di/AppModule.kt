@@ -18,7 +18,7 @@ import javax.inject.Singleton
 class AppModule {
     @Singleton
     @Provides
-    fun provideGithubService(): PointsService {
+    fun providePointsService(): PointsService {
         val okHttpClient = UnsafeOkHttpClient.getUnsafeOkHttpClient().newBuilder()
             .readTimeout(60, TimeUnit.SECONDS)
             .cache(null)
