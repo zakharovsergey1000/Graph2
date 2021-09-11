@@ -103,10 +103,10 @@ class PointsFragment : Fragment(), Injectable {
                         LineDataSet.Mode.LINEAR.ordinal
                     ) == LineDataSet.Mode.CUBIC_BEZIER.ordinal
                 ) {
-                    viewModel.dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER)
-                    viewModel.dataSet.setCubicIntensity(0.2f)
+                    viewModel.dataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
+                    viewModel.dataSet.cubicIntensity = 0.2f
                 } else {
-                    viewModel.dataSet.setMode(LineDataSet.Mode.LINEAR)
+                    viewModel.dataSet.mode = LineDataSet.Mode.LINEAR
                 }
 
 //            dataSet.setColor(...);
@@ -114,7 +114,7 @@ class PointsFragment : Fragment(), Injectable {
             }
             adapter.submitList(viewModel.listResource)
             val lineData = LineData(viewModel.dataSet)
-            binding.chart1.setData(lineData)
+            binding.chart1.data = lineData
             binding.chart1.invalidate() // refresh
         })
     }
@@ -216,17 +216,17 @@ class PointsFragment : Fragment(), Injectable {
                         putInt(getString(R.string.line_data_set_mode_key), LineDataSet.Mode.CUBIC_BEZIER.ordinal)
                         apply()
                     }
-                    pointsViewModel.dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER)
-                    pointsViewModel.dataSet.setCubicIntensity(0.2f)
+                    pointsViewModel.dataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
+                    pointsViewModel.dataSet.cubicIntensity = 0.2f
                 } else {
                     with (sharedPref.edit()) {
                         putInt(getString(R.string.line_data_set_mode_key), LineDataSet.Mode.LINEAR.ordinal)
                         apply()
                     }
-                    pointsViewModel.dataSet.setMode(LineDataSet.Mode.LINEAR)
+                    pointsViewModel.dataSet.mode = LineDataSet.Mode.LINEAR
                 }
                 val lineData = LineData(pointsViewModel.dataSet)
-                binding.chart1.setData(lineData)
+                binding.chart1.data = lineData
                 binding.chart1.invalidate() // refresh
                 true
             }
