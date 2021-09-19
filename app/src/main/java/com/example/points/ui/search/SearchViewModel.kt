@@ -43,16 +43,7 @@ class SearchViewModel @Inject constructor(pointsRepository: PointsRepository) : 
     }
 
     class LoadMoreState(val isRunning: Boolean, val errorMessage: String?) {
-        private var handledError = false
 
-        val errorMessageIfNotHandled: String?
-            get() {
-                if (handledError) {
-                    return null
-                }
-                handledError = true
-                return errorMessage
-            }
     }
 
     class NextPageHandler(private val repository: PointsRepository) : Observer<Resource<Boolean>> {
